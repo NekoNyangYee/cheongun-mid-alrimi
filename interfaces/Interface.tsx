@@ -1,31 +1,31 @@
 export interface TimeTableQueryParams {
-    ATPT_OFCDC_SC_CODE: string; // 시도교육청코드
-    SD_SCHUL_CODE: string;      // 행정표준코드
-    AY?: string;                // 학년도
-    SEM?: string;               // 학기
-    ALL_TI_YMD?: string;        // 시간표일자
-    DGHT_CRSE_SC_NM?: string;   // 주야과정명
-    GRADE?: string;             // 학년
-    CLASS_NM?: string;          // 학급명
-    PERIO?: string;             // 교시
-    TI_FROM_YMD?: string;       // 시간표시작일자
-    TI_TO_YMD?: string;         // 시간표종료일자
+    ATPT_OFCDC_SC_CODE: string;
+    SD_SCHUL_CODE: string;
+    AY?: string;
+    SEM?: string;
+    ALL_TI_YMD?: string;
+    DGHT_CRSE_SC_NM?: string;
+    GRADE?: string;
+    CLASS_NM?: string;
+    PERIO?: string;
+    TI_FROM_YMD?: string;
+    TI_TO_YMD?: string;
 }
 
 export interface TimeTableResponse {
-    ATPT_OFCDC_SC_CODE: string; // 시도교육청코드
-    ATPT_OFCDC_SC_NM: string;   // 시도교육청명
-    SD_SCHUL_CODE: string;      // 행정표준코드
-    SCHUL_NM: string;           // 학교명
-    AY: string;                 // 학년도
-    SEM: string;                // 학기
-    ALL_TI_YMD: string;         // 시간표일자
-    DGHT_CRSE_SC_NM: string;    // 주야과정명
-    GRADE: string;              // 학년
-    CLASS_NM: string;           // 학급명
-    PERIO: string;              // 교시
-    ITRT_CNTNT: string;         // 수업내용
-    LOAD_DTM: string;           // 수정일자
+    ATPT_OFCDC_SC_CODE: string;
+    ATPT_OFCDC_SC_NM: string;
+    SD_SCHUL_CODE: string;
+    SCHUL_NM: string;
+    AY: string;
+    SEM: string;
+    ALL_TI_YMD: string;
+    DGHT_CRSE_SC_NM: string;
+    GRADE: string;
+    CLASS_NM: string;
+    PERIO: string;
+    ITRT_CNTNT: string;
+    LOAD_DTM: string;
 }
 
 export interface SchoolScheduleQueryParams {

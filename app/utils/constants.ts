@@ -1,1 +1,1 @@
-export const BASE_URL = "https://open.neis.go.kr/hub";
+export const BASE_URL = "https://open.neis.go.kr/hub/";
