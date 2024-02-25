@@ -1,9 +1,9 @@
-import EducationHome from "@/Components/EducationHome";
+import EducationSchedules from "@/Components/EducationSchedules";
 
 const Home = () => {
   return (
     <>
-      <EducationHome />
+      <EducationSchedules />
     </>
   );
 }

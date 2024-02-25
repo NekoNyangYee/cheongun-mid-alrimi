@@ -30,9 +30,9 @@ export interface TimeTableResponse {
 
 export interface SchoolScheduleQueryParams {
     KEY: string;
-    Type: string;
-    pIndex: number;
-    pSize: number;
+    Type?: string;
+    pIndex?: number;
+    pSize?: number;
     ATPT_OFCDC_SC_CODE: string;
     SD_SCHUL_CODE: string;
     DGHT_CRSE_SC_NM?: string;
