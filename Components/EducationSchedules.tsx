@@ -1,6 +1,8 @@
 "use client"
 
 import React, { useState, useEffect } from "react";
+import EducationTimeTable from "./EducationTimeTable";
+import SchoolTimeTable from "./EducationTimeTable";
 
 // 필요한 데이터 필드만을 포함하는 인터페이스를 정의합니다.
 interface EventData {
@@ -66,6 +68,7 @@ const EducationSchedules: React.FC = () => {
           ))}
         </ul>
       ) : <p>표시 할 학사일정이 없습니다.</p>}
+      <EducationTimeTable />
     </div>
   );
 };
