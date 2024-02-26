@@ -1,6 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { SchoolScheduleQueryParams, SchoolScheduleResponse, TimeTableQueryParams, TimeTableResponse } from '@/interfaces/Interface';
+import { ClassInfoRequestParams, SchoolScheduleQueryParams, SchoolScheduleResponse, TimeTableQueryParams, TimeTableResponse } from '@/interfaces/Interface';
 import fetchData from '../../app/utils/fetchData';
+
+function isClassInfoQeryParams(queryParams: any): queryParams is ClassInfoRequestParams {
+    return 'ATPT_OFCDC_SC_CODE' in queryParams && 'SD_SCHUL_CODE' in queryParams;
+}
 
 function isTimeTableQueryParams(queryParams: any): queryParams is TimeTableQueryParams {
     return 'ATPT_OFCDC_SC_CODE' in queryParams && 'SD_SCHUL_CODE' in queryParams;
@@ -21,6 +25,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             data = await fetchTimeTable(queryParams);
         } else if (endpoint === 'SchoolSchedule' && isSchoolScheduleQueryParams(queryParams)) {
             data = await fetchSchoolSchedule(queryParams);
+        } else if (endpoint === 'classInfo' && isClassInfoQeryParams(queryParams)) {
+            data = await fetchClassInfo(queryParams);
         } else {
             res.status(400).json({ message: 'Invalid query parameters' });
             return;
@@ -42,4 +48,8 @@ export const fetchTimeTable = async (queryParams: TimeTableQueryParams): Promise
 
 export const fetchSchoolSchedule = async (queryParams: SchoolScheduleQueryParams): Promise<SchoolScheduleResponse[]> => {
     return fetchData<SchoolScheduleResponse[]>('SchoolSchedule', queryParams as any);
+};
+
+export const fetchClassInfo = async (queryParams: ClassInfoRequestParams): Promise<SchoolScheduleResponse[]> => {
+    return fetchData<SchoolScheduleResponse[]>('classInfo', queryParams as any);
 };

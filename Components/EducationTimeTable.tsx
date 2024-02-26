@@ -1,8 +1,9 @@
 "use client";
 
+import { ClassInfoResponse } from "@/interfaces/Interface";
 import React, { useState, useEffect } from "react";
 
-// 시간표 데이터 타입 정의
+// 시간표 데이터 및 선택 가능한 학년과 반의 타입 정의
 interface TimeTableData {
   PERIO: string; // 교시
   ITRT_CNTNT: string; // 수업 내용
@@ -11,10 +12,14 @@ interface TimeTableData {
   CLASS_NM: string; // 반
 }
 
-// 선택 가능한 학년과 반의 타입 정의
 interface Selection {
   GRADE: string;
   CLASS_NM: string;
+}
+
+interface ClassInfo {
+  GRADE: string; // 학년
+  CLASS_NM: string; // 반
 }
 
 const EducationTimeTable: React.FC = () => {
@@ -22,6 +27,7 @@ const EducationTimeTable: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [selection, setSelection] = useState<Selection>({ GRADE: "1", CLASS_NM: "1" }); // 기본 선택은 1학년 1반
+  const [availableClasses, setAvailableClasses] = useState<ClassInfo[]>([]); // 사용 가능한 학급 정보 저장
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,22 +37,38 @@ const EducationTimeTable: React.FC = () => {
         const OFFICE_CODE = process.env.NEXT_PUBLIC_OFFICE_CODE;
         const SCHOOL_CODE = process.env.NEXT_PUBLIC_SCHOOL_CODE;
         const API_KEY = process.env.NEXT_PUBLIC_MY_API_KEY;
+        const currentYear = new Date().getFullYear().toString(); // 현재 년도 구하기
 
         // 현재 날짜를 'YYYYMMDD' 형식으로 구하기
         const today = new Date();
         const todayStr = `${today.getFullYear()}${(today.getMonth() + 1).toString().padStart(2, '0')}${today.getDate().toString().padStart(2, '0')}`;
 
-        const response = await fetch(
+        // 시간표 및 클래스 정보 가져오기
+        const responseMisTimetable = await fetch(
           `/api/education?endpoint=misTimetable&KEY=${API_KEY}&ATPT_OFCDC_SC_CODE=${OFFICE_CODE}&SD_SCHUL_CODE=${SCHOOL_CODE}&ALL_TI_YMD=${todayStr}&GRADE=${selection.GRADE}&CLASS_NM=${selection.CLASS_NM}`
         );
-        if (!response.ok) {
+
+        const responseClassInfo = await fetch(
+          `/api/education?endpoint=classInfo&KEY=${API_KEY}&ATPT_OFCDC_SC_CODE=${OFFICE_CODE}&SD_SCHUL_CODE=${SCHOOL_CODE}&AY=${currentYear}`
+        );
+
+        if (!responseMisTimetable.ok || !responseClassInfo.ok) {
           throw new Error('Failed to fetch data');
         }
-        const data = await response.json();
 
-        // 현재 날짜(`ALL_TI_YMD`)에 해당하며 선택된 학년과 반에 해당하는 시간표 데이터만 필터링하여 저장
-        const filteredTimeTable = data.misTimetable[1].row.filter((item: TimeTableData) => item.ALL_TI_YMD === todayStr && item.GRADE === selection.GRADE && item.CLASS_NM === selection.CLASS_NM);
+        const misTimetableData = await responseMisTimetable.json();
+        const classInfoData = await responseClassInfo.json();
+
+        // 시간표 데이터 필터링 및 상태 업데이트
+        const filteredTimeTable = misTimetableData.misTimetable[1].row.filter((item: TimeTableData) => item.ALL_TI_YMD === todayStr && item.GRADE === selection.GRADE && item.CLASS_NM === selection.CLASS_NM);
         setTimeTable(filteredTimeTable);
+
+        // 현재 년도에 해당하는 클래스 정보를 사용하여 선택 가능한 학년과 반 업데이트
+        const classes = classInfoData.classInfo[1].row
+          .filter((item: ClassInfoResponse) => item.AY === currentYear) // 현재 년도에 해당하는 데이터만 필터링
+          .map((item: ClassInfoResponse) => ({ GRADE: item.GRADE.toString(), CLASS_NM: item.CLASS_NM.toString() }));
+        setAvailableClasses(classes);
+
       } catch (error) {
         setError(error instanceof Error ? error.message : 'An unknown error occurred');
       } finally {
@@ -77,20 +99,25 @@ const EducationTimeTable: React.FC = () => {
           <div>
             <label>Grade: </label>
             <select value={selection.GRADE} onChange={handleGradeChange}>
-              {[1, 2, 3].map((grade) => (
-                <option key={grade} value={grade}>
-                  {grade}
-                </option>
-              ))}
+              {availableClasses
+                .map((cls) => cls.GRADE)
+                .filter((value, index, self) => self.indexOf(value) === index)
+                .map((grade) => (
+                  <option key={grade} value={grade}>
+                    {grade}
+                  </option>
+                ))}
             </select>
-            <label>Class: </label>
             <select value={selection.CLASS_NM} onChange={handleClassChange}>
-              {[1, 2, 3, 4, 5, 6, 7, 8].map((classNm) => (
-                <option key={classNm} value={classNm}>
-                  {classNm}
-                </option>
-              ))}
+              {availableClasses
+                .filter((cls) => cls.GRADE === selection.GRADE)
+                .map((cls, index) => ( // index를 사용하여 반 번호의 중복 문제를 해결
+                  <option key={`${cls.GRADE}-${cls.CLASS_NM}-${index}`} value={cls.CLASS_NM}>
+                    {cls.CLASS_NM}
+                  </option>
+                ))}
             </select>
+
           </div>
           <table>
             <thead>
@@ -114,7 +141,7 @@ const EducationTimeTable: React.FC = () => {
       )}
     </div>
   );
-
 };
 
 export default EducationTimeTable;
+
