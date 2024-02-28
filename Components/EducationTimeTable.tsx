@@ -95,7 +95,6 @@ const EducationTimeTable: React.FC = () => {
       {timeTable.length > 0 ? (
         <>
           <h1>Today's Time Table for {timeTable[0].ALL_TI_YMD}</h1>
-          <h2>Grade {selection.GRADE}, Class {selection.CLASS_NM}</h2>
           <div>
             <label>Grade: </label>
             <select value={selection.GRADE} onChange={handleGradeChange}>
@@ -117,13 +116,12 @@ const EducationTimeTable: React.FC = () => {
                   </option>
                 ))}
             </select>
-
           </div>
           <table>
             <thead>
               <tr>
-                <th>Period</th>
-                <th>Content</th>
+                <th>교시</th>
+                <th>시간표</th>
               </tr>
             </thead>
             <tbody>
