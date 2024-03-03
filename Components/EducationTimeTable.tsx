@@ -1,7 +1,7 @@
 "use client";
 
-import { ClassInfoResponse } from "@/interfaces/Interface";
 import React, { useState, useEffect } from "react";
+import { ClassInfoResponse } from "@/interfaces/Interface";
 
 interface TimeTableData {
   PERIO: string;
@@ -22,11 +22,11 @@ interface ClassInfo {
 }
 
 const EducationTimeTable: React.FC = () => {
-  const [timeTable, setTimeTable] = useState<Array<TimeTableData>>([]);
+  const [timeTable, setTimeTable] = useState<TimeTableData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [selection, setSelection] = useState<Selection>({ GRADE: "1", CLASS_NM: "1" }); // 기본 선택은 1학년 1반
-  const [availableClasses, setAvailableClasses] = useState<Array<ClassInfo>>([]); // 사용 가능한 학급 정보 저장
+  const [selection, setSelection] = useState<Selection>({ GRADE: "1", CLASS_NM: "1" });
+  const [availableClasses, setAvailableClasses] = useState<ClassInfo[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,8 +67,7 @@ const EducationTimeTable: React.FC = () => {
         setAvailableClasses(classes);
 
       } catch (error) {
-        setError(error instanceof Error ? "시간표를 준비 중이에요. 잠시만 기다려주세요." : 'An unknown error occurred');
-        console.log(error);
+        setError("시간표를 준비 중이에요. 잠시만 기다려주세요.");
       } finally {
         setIsLoading(false);
       }
@@ -85,59 +84,60 @@ const EducationTimeTable: React.FC = () => {
     setSelection({ ...selection, CLASS_NM: e.target.value });
   };
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
-
   return (
     <div>
-      <h1>Today's Time Table for {timeTable[0].ALL_TI_YMD}</h1>
-      {timeTable.length > 0 ? (
-        <>
-          <div>
-            <label>Grade: </label>
-            <select value={selection.GRADE} onChange={handleGradeChange}>
-              {availableClasses
-                .map((cls) => cls.GRADE)
-                .filter((value, index, self) => self.indexOf(value) === index)
-                .map((grade) => (
-                  <option key={grade} value={grade}>
-                    {grade}
-                  </option>
-                ))}
-            </select>
-            <select value={selection.CLASS_NM} onChange={handleClassChange}>
-              {availableClasses
-                .filter((cls) => cls.GRADE === selection.GRADE)
-                .map((cls, index) => ( // index를 사용하여 반 번호의 중복 문제를 해결
-                  <option key={`${cls.GRADE}-${cls.CLASS_NM}-${index}`} value={cls.CLASS_NM}>
-                    {cls.CLASS_NM}
-                  </option>
-                ))}
-            </select>
-          </div>
-          <table>
-            <thead>
-              <tr>
-                <th>교시</th>
-                <th>시간표</th>
+      <h1>오늘의 시간표</h1>
+      <div>
+        <label>학년: </label>
+        <select value={selection.GRADE} onChange={handleGradeChange}>
+          {availableClasses
+            .map((cls) => cls.GRADE)
+            .filter((value, index, self) => self.indexOf(value) === index)
+            .map((grade) => (
+              <option key={grade} value={grade}>
+                {grade}학년
+              </option>
+            ))}
+        </select>
+        <label>반: </label>
+        <select value={selection.CLASS_NM} onChange={handleClassChange}>
+          {availableClasses
+            .filter((cls) => cls.GRADE === selection.GRADE)
+            .map((cls, index) => (
+              <option key={`${cls.GRADE}-${cls.CLASS_NM}-${index}`} value={cls.CLASS_NM}>
+                {cls.CLASS_NM}반
+              </option>
+            ))}
+        </select>
+      </div>
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p>Error: {error}</p>
+      ) : timeTable.length > 0 ? (
+        <table>
+          <thead>
+            <tr>
+              <th>교시</th>
+              <th>시간표</th>
+            </tr>
+          </thead>
+          <tbody>
+            {timeTable.map((item, index) => (
+              <tr key={index}>
+                <td>{item.PERIO}</td>
+                <td>{item.ITRT_CNTNT}</td>
               </tr>
-            </thead>
-            <tbody>
-              {timeTable.map((item, index) => (
-                <tr key={index}>
-                  <td>{item.PERIO}</td>
-                  <td>{item.ITRT_CNTNT}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </>
+            ))}
+          </tbody>
+        </table>
       ) : (
-        <p>No time table for today.</p>
+        <p>오늘은 시간표가 없습니다.</p>
       )}
     </div>
   );
 };
 
 export default EducationTimeTable;
+
 
