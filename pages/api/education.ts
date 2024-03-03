@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { ClassInfoRequestParams, SchoolScheduleQueryParams, SchoolScheduleResponse, TimeTableQueryParams, TimeTableResponse } from '@/interfaces/Interface';
+import { ClassInfoRequestParams, ClassInfoResponse, MealServiceDietInfoParams, MealServiceDietInfoResponse, SchoolScheduleQueryParams, SchoolScheduleResponse, TimeTableQueryParams, TimeTableResponse } from '@/interfaces/Interface';
 import fetchData from '../../app/utils/fetchData';
 
 function isClassInfoQeryParams(queryParams: any): queryParams is ClassInfoRequestParams {
@@ -11,6 +11,10 @@ function isTimeTableQueryParams(queryParams: any): queryParams is TimeTableQuery
 }
 
 function isSchoolScheduleQueryParams(params: any): params is SchoolScheduleQueryParams {
+    return 'ATPT_OFCDC_SC_CODE' in params && 'SD_SCHUL_CODE' in params;
+}
+
+function ismealServiceDietInfoQueryParams(params: any): params is MealServiceDietInfoParams {
     return 'ATPT_OFCDC_SC_CODE' in params && 'SD_SCHUL_CODE' in params;
 }
 
@@ -27,6 +31,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             data = await fetchSchoolSchedule(queryParams);
         } else if (endpoint === 'classInfo' && isClassInfoQeryParams(queryParams)) {
             data = await fetchClassInfo(queryParams);
+        } else if (endpoint === 'mealServiceDietInfo' && ismealServiceDietInfoQueryParams(queryParams)) {
+            data = await fetchMealServiceDietInfo(queryParams);
         } else {
             res.status(400).json({ message: 'Invalid query parameters' });
             return;
@@ -50,6 +56,10 @@ export const fetchSchoolSchedule = async (queryParams: SchoolScheduleQueryParams
     return fetchData<SchoolScheduleResponse[]>('SchoolSchedule', queryParams as any);
 };
 
-export const fetchClassInfo = async (queryParams: ClassInfoRequestParams): Promise<SchoolScheduleResponse[]> => {
-    return fetchData<SchoolScheduleResponse[]>('classInfo', queryParams as any);
+export const fetchClassInfo = async (queryParams: ClassInfoRequestParams): Promise<ClassInfoResponse[]> => {
+    return fetchData<ClassInfoResponse[]>('classInfo', queryParams as any);
+};
+
+export const fetchMealServiceDietInfo = async (queryParams: MealServiceDietInfoParams): Promise<MealServiceDietInfoResponse[]> => {
+    return fetchData<MealServiceDietInfoResponse[]>('mealServiceDietInfo', queryParams as any);
 };

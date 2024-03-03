@@ -3,13 +3,12 @@
 import { ClassInfoResponse } from "@/interfaces/Interface";
 import React, { useState, useEffect } from "react";
 
-// 시간표 데이터 및 선택 가능한 학년과 반의 타입 정의
 interface TimeTableData {
-  PERIO: string; // 교시
-  ITRT_CNTNT: string; // 수업 내용
-  ALL_TI_YMD: string; // 날짜
-  GRADE: string; // 학년
-  CLASS_NM: string; // 반
+  PERIO: string;
+  ITRT_CNTNT: string;
+  ALL_TI_YMD: string;
+  GRADE: string;
+  CLASS_NM: string;
 }
 
 interface Selection {
@@ -18,16 +17,16 @@ interface Selection {
 }
 
 interface ClassInfo {
-  GRADE: string; // 학년
-  CLASS_NM: string; // 반
+  GRADE: string;
+  CLASS_NM: string;
 }
 
 const EducationTimeTable: React.FC = () => {
-  const [timeTable, setTimeTable] = useState<TimeTableData[]>([]);
+  const [timeTable, setTimeTable] = useState<Array<TimeTableData>>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [selection, setSelection] = useState<Selection>({ GRADE: "1", CLASS_NM: "1" }); // 기본 선택은 1학년 1반
-  const [availableClasses, setAvailableClasses] = useState<ClassInfo[]>([]); // 사용 가능한 학급 정보 저장
+  const [availableClasses, setAvailableClasses] = useState<Array<ClassInfo>>([]); // 사용 가능한 학급 정보 저장
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,13 +36,11 @@ const EducationTimeTable: React.FC = () => {
         const OFFICE_CODE = process.env.NEXT_PUBLIC_OFFICE_CODE;
         const SCHOOL_CODE = process.env.NEXT_PUBLIC_SCHOOL_CODE;
         const API_KEY = process.env.NEXT_PUBLIC_MY_API_KEY;
-        const currentYear = new Date().getFullYear().toString(); // 현재 년도 구하기
+        const currentYear = new Date().getFullYear().toString();
 
-        // 현재 날짜를 'YYYYMMDD' 형식으로 구하기
-        const today = new Date();
-        const todayStr = `${today.getFullYear()}${(today.getMonth() + 1).toString().padStart(2, '0')}${today.getDate().toString().padStart(2, '0')}`;
+        const today: Date = new Date();
+        const todayStr: string = `${today.getFullYear()}${(today.getMonth() + 1).toString().padStart(2, '0')}${today.getDate().toString().padStart(2, '0')}`;
 
-        // 시간표 및 클래스 정보 가져오기
         const responseMisTimetable = await fetch(
           `/api/education?endpoint=misTimetable&KEY=${API_KEY}&ATPT_OFCDC_SC_CODE=${OFFICE_CODE}&SD_SCHUL_CODE=${SCHOOL_CODE}&ALL_TI_YMD=${todayStr}&GRADE=${selection.GRADE}&CLASS_NM=${selection.CLASS_NM}`
         );
@@ -70,7 +67,8 @@ const EducationTimeTable: React.FC = () => {
         setAvailableClasses(classes);
 
       } catch (error) {
-        setError(error instanceof Error ? error.message : 'An unknown error occurred');
+        setError(error instanceof Error ? "시간표를 준비 중이에요. 잠시만 기다려주세요." : 'An unknown error occurred');
+        console.log(error);
       } finally {
         setIsLoading(false);
       }
@@ -92,9 +90,9 @@ const EducationTimeTable: React.FC = () => {
 
   return (
     <div>
+      <h1>Today's Time Table for {timeTable[0].ALL_TI_YMD}</h1>
       {timeTable.length > 0 ? (
         <>
-          <h1>Today's Time Table for {timeTable[0].ALL_TI_YMD}</h1>
           <div>
             <label>Grade: </label>
             <select value={selection.GRADE} onChange={handleGradeChange}>

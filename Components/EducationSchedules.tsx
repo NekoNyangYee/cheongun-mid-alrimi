@@ -70,16 +70,14 @@ const EducationSchedules: React.FC = () => {
   return (
     <div>
       <h1>{currentMonth}월의 학사일정</h1>
+      <h2>오늘의 일정</h2>
       {todayEvents.length > 0 ? (
-        <>
-          <h2>오늘의 일정</h2>
-          <ul>
-            {todayEvents.map((event, index) => (
-              <li key={index}>{`${event.EVENT_NM} - ${event.DISPLAY_DATE}`}</li>
-            ))}
-          </ul>
-        </>
-      ) : null}
+        <ul>
+          {todayEvents.map((event, index) => (
+            <li key={index}>{`${event.EVENT_NM} - ${event.DISPLAY_DATE}`}</li>
+          ))}
+        </ul>
+      ) : <p>예정된 일정이 없습니다.</p>}
       <h2>지나간 일정</h2>
       <ul>
         {pastEvents.map((event, index) => (
@@ -96,7 +94,6 @@ const EducationSchedules: React.FC = () => {
       ) : (
         <p>예정된 일정이 없습니다.</p>
       )}
-      <EducationTimeTable />
     </div>
   );
 };
