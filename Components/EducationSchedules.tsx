@@ -8,7 +8,7 @@ interface EventData {
   DISPLAY_DATE: string; // 'YYYY년 MM월 DD일' 형식
 }
 
-const EducationSchedules: React.FC = () => {
+const EducationSchedules = () => {
   const [todayEvents, setTodayEvents] = useState<EventData[]>([]);
   const [pastEvents, setPastEvents] = useState<EventData[]>([]);
   const [upcomingEvents, setUpcomingEvents] = useState<EventData[]>([]);

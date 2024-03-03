@@ -21,7 +21,7 @@ interface ClassInfo {
   CLASS_NM: string;
 }
 
-const EducationTimeTable: React.FC = () => {
+const EducationTimeTable = () => {
   const [timeTable, setTimeTable] = useState<TimeTableData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
