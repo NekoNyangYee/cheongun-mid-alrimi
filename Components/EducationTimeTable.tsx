@@ -113,7 +113,7 @@ const EducationTimeTable = () => {
       {isLoading ? (
         <p>Loading...</p>
       ) : error ? (
-        <p>Error: {error}</p>
+        <p>{error}</p>
       ) : timeTable.length > 0 ? (
         <table>
           <thead>

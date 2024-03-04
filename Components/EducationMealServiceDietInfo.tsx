@@ -3,8 +3,14 @@
 import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 
+const WrapMealUnfoTitle = styled.div(() => `
+    display: flex;
+    align-items: center;
+    gap: 6px;
+`);
+
 const MealTitle = styled.h1(() => `
-    font-size: 1.2rem;
+    font-size: 1rem;
 `);
 
 const WrapMealInfoContainer = styled.div(() => `
@@ -26,10 +32,10 @@ const MenuContainer = styled.div(() => `
     padding: 1rem;
     border: 1px solid #E4E4E7;
     border-radius: 12px;
-    flex: 0 0 200px; // 이 부분에서 flex-basis를 200px로 설정합니다. 필요에 따라 조정하세요.
-    box-sizing: border-box; // 패딩이 너비에 포함되도록 합니다.
-    justify-content: space-between; /* 내용이 적을 때도 하단 내용을 아래로 밀어내기 위해 */
-    flex: 1 0 auto; /* flex-grow, flex-shrink, flex-basis 설정 */
+    flex: 0 0 200px; 
+    box-sizing: border-box; 
+    justify-content: space-between;
+    flex: 1 0 auto; 
     min-height: 100px;
 
     & p {
@@ -94,7 +100,12 @@ const EducationMealServiceDietInfo: React.FC = () => {
 
     return (
         <>
-            <MealTitle>급식 정보</MealTitle>
+            <WrapMealUnfoTitle>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M11.9365 13.1038L4.86344 20.1269C4.72497 20.2653 4.55349 20.3387 4.34901 20.3471C4.14454 20.3554 3.96474 20.282 3.80961 20.1269C3.66474 19.982 3.59231 19.8064 3.59231 19.6C3.59231 19.3936 3.66474 19.2179 3.80961 19.0731L13.475 9.40767C13.1558 8.65639 13.0981 7.86632 13.3019 7.03747C13.5058 6.20864 13.9583 5.45384 14.6596 4.77307C15.4275 4.00512 16.3275 3.5205 17.3596 3.31922C18.3916 3.11794 19.2429 3.35255 19.9134 4.02307C20.584 4.69357 20.8186 5.54485 20.6173 6.5769C20.416 7.60895 19.9314 8.50894 19.1634 9.27687C18.4827 9.97815 17.7279 10.4307 16.899 10.6346C16.0702 10.8384 15.2801 10.7807 14.5288 10.4615L12.9903 12L20.0634 19.0731C20.2019 19.2115 20.2753 19.383 20.2836 19.5875C20.2919 19.792 20.2186 19.9718 20.0634 20.1269C19.9186 20.2718 19.7429 20.3426 19.5365 20.3394C19.3301 20.3362 19.1545 20.2653 19.0096 20.1269L11.9365 13.1038ZM7.34421 12.1615L4.45961 9.27687C3.83654 8.6538 3.42693 7.85702 3.23076 6.88652C3.03461 5.916 3.18846 5.04614 3.69231 4.27692C3.84999 4.03334 4.07179 3.89488 4.35769 3.86155C4.64357 3.82821 4.88844 3.9186 5.09229 4.1327L10.2173 9.28845L7.34421 12.1615Z" fill="black" />
+                </svg>
+                <MealTitle>급식 정보</MealTitle>
+            </WrapMealUnfoTitle>
             <WrapMealInfoContainer>
                 {isLoading ? (
                     <p>Loading...</p>

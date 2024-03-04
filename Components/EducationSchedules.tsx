@@ -76,19 +76,7 @@ const EducationSchedules = () => {
           ))}
         </ul>
       ) : (
-        <p>예정된 일정이 없습니다.</p>
-      )}
-      <h2>지나간 일정</h2>
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : pastEvents.length > 0 ? (
-        <ul>
-          {pastEvents.map((event, index) => (
-            <li key={index}>{`${event.EVENT_NM} - ${event.DISPLAY_DATE}`}</li>
-          ))}
-        </ul>
-      ) : (
-        <p>지나간 일정이 없습니다.</p>
+        <p>오늘 일정이 없습니다.</p>
       )}
       <h2>예정된 일정</h2>
       {isLoading ? (
