@@ -58,7 +58,7 @@ interface MealInfo {
     CAL_INFO: string;
 }
 
-const EducationMealServiceDietInfo: React.FC = () => {
+const EducationMealServiceDietInfo = () => {
     const [mealInfos, setMealInfos] = useState<MealInfo[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -82,14 +82,15 @@ const EducationMealServiceDietInfo: React.FC = () => {
                 // Ensure we have the expected data structure
                 if (data.mealServiceDietInfo && data.mealServiceDietInfo[1].row) {
                     const meals: MealInfo[] = data.mealServiceDietInfo[1].row;
-                    // Filter for meals from today onwards, then take the next 7 days
-                    const todayStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+                    const today = new Date();
+                    const todayStr = `${today.getFullYear()}${(today.getMonth() + 1).toString().padStart(2, '0')}${today.getDate().toString().padStart(2, '0')}`;
+                    console.log(todayStr);
                     const startIndex = meals.findIndex(meal => meal.MLSV_YMD >= todayStr);
                     const upcomingMeals = meals.slice(startIndex, startIndex + 7);
                     setMealInfos(upcomingMeals);
                 }
             } catch (error: any) {
-                setError('알 수 없는 오류가 발생했습니다.');
+                setError('급식표를 준비중에요. ');
             } finally {
                 setIsLoading(false);
             }
@@ -97,6 +98,7 @@ const EducationMealServiceDietInfo: React.FC = () => {
 
         fetchMealData();
     }, []);
+
 
     return (
         <>
@@ -110,7 +112,7 @@ const EducationMealServiceDietInfo: React.FC = () => {
                 {isLoading ? (
                     <p>Loading...</p>
                 ) : error ? (
-                    <p>Error: {error}</p>
+                    <p>{error}</p>
                 ) : mealInfos.length > 0 ? (
                     mealInfos.map(mealInfo => (
                         <MenuContainer key={mealInfo.MLSV_YMD}>
