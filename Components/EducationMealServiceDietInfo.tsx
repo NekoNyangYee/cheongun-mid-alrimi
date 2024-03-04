@@ -72,25 +72,22 @@ const EducationMealServiceDietInfo = () => {
                 const OFFICE_CODE = process.env.NEXT_PUBLIC_OFFICE_CODE;
                 const SCHOOL_CODE = process.env.NEXT_PUBLIC_SCHOOL_CODE;
                 const API_KEY = process.env.NEXT_PUBLIC_MY_API_KEY;
-                const response = await fetch(`/api/education?endpoint=mealServiceDietInfo&KEY=${API_KEY}&Type=json&pIndex=1&pSize=365&ATPT_OFCDC_SC_CODE=${OFFICE_CODE}&SD_SCHUL_CODE=${SCHOOL_CODE}&MLSV_YMD=${new Date().getFullYear()}`);
+                const today = new Date();
+                const todayStr = `${today.getFullYear()}${(today.getMonth() + 1).toString().padStart(2, '0')}${today.getDate().toString().padStart(2, '0')}`;
+                const response = await fetch(`/api/education?endpoint=mealServiceDietInfo&KEY=${API_KEY}&Type=json&pIndex=1&pSize=365&ATPT_OFCDC_SC_CODE=${OFFICE_CODE}&SD_SCHUL_CODE=${SCHOOL_CODE}&MLSV_YMD=${today.getFullYear()}`);
 
                 if (!response.ok) {
                     throw new Error('데이터를 불러오는 중에 오류가 발생했습니다.');
                 }
 
                 const data = await response.json();
-                // Ensure we have the expected data structure
                 if (data.mealServiceDietInfo && data.mealServiceDietInfo[1].row) {
-                    const meals: MealInfo[] = data.mealServiceDietInfo[1].row;
-                    const today = new Date();
-                    const todayStr = `${today.getFullYear()}${(today.getMonth() + 1).toString().padStart(2, '0')}${today.getDate().toString().padStart(2, '0')}`;
-                    console.log(todayStr);
-                    const startIndex = meals.findIndex(meal => meal.MLSV_YMD >= todayStr);
-                    const upcomingMeals = meals.slice(startIndex, startIndex + 7);
-                    setMealInfos(upcomingMeals);
+                    let meals: MealInfo[] = data.mealServiceDietInfo[1].row.filter((meal: { MLSV_YMD: string; }) => meal.MLSV_YMD >= todayStr);
+                    const filledMeals = fillMissingDates(meals, today);
+                    setMealInfos(filledMeals.slice(0, 7));
                 }
             } catch (error: any) {
-                setError('급식표를 준비중에요. ');
+                setError('급식표를 준비중에요.');
             } finally {
                 setIsLoading(false);
             }
@@ -98,6 +95,25 @@ const EducationMealServiceDietInfo = () => {
 
         fetchMealData();
     }, []);
+
+    const fillMissingDates = (meals: MealInfo[], startDate: Date): MealInfo[] => {
+        return Array.from({ length: 7 }).map((_, index) => {
+            const targetDate = new Date(startDate);
+            targetDate.setDate(targetDate.getDate() + index);
+            const dateStr = `${targetDate.getFullYear()}${(targetDate.getMonth() + 1).toString().padStart(2, '0')}${targetDate.getDate().toString().padStart(2, '0')}`;
+            const mealForDate = meals.find(meal => meal.MLSV_YMD === dateStr);
+
+            if (mealForDate) {
+                return mealForDate;
+            } else {
+                return {
+                    MLSV_YMD: dateStr,
+                    DDISH_NM: "이 날은 급식이 없어요",
+                    CAL_INFO: "",
+                };
+            }
+        });
+    };
 
 
     return (
@@ -133,8 +149,3 @@ const EducationMealServiceDietInfo = () => {
 };
 
 export default EducationMealServiceDietInfo;
-
-
-
-
-
