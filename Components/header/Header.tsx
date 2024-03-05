@@ -15,12 +15,16 @@ const StyledHeaderContent = styled.div`
     margin: 0 auto;
     padding: 0;
     box-sizing: border-box;
+
+    & a {
+      z-index: 10;
+    }
     
     @media (max-width: 972px) {
+      flex-direction: column; // 변경: 모바일 뷰에서 컨텐츠를 세로로 정렬
       width: auto;
     }
 `;
-
 const HeaderBox = styled.div(({ isOpen }: { isOpen: boolean }) => `
   position: fixed;
   width: 100%;
@@ -33,23 +37,24 @@ const HeaderBox = styled.div(({ isOpen }: { isOpen: boolean }) => `
   display: flex;
   justify-content: space-between;
   z-index: 10;
+  transition: height 0.3s ease-in-out;
 
   & .home-menu {
     display: inline-block;
     line-height: 0;
   }
 
-  & .main-logo {
+   & .main-logo {
     width: 36px;
     height: 36px;
 
-    @media (max-width: 972px) {
-      margin: 0 auto;
+      @media (max-width: 972px) {
+        margin: 0 auto;
+      }
     }
-  }
 
   @media (max-width: 972px) {
-    height: ${isOpen ? "100vh" : "auto"};
+    height: ${isOpen ? "100vh" : "8vh"};
     overflow: hidden;
   }
 `);
@@ -66,17 +71,17 @@ const StyledLink = styled.button<{ isActive: boolean }>`
 `;
 
 const MenuIcon = styled.div`
-  position: absolute;
   display: none;
+  position: fixed;
   top: 20px;
   left: 20px;
   cursor: pointer;
-  z-index: 15;
+  z-index: 20;
   line-height: 0;
 
   & svg {
-    width: 30px;
-    height: 30px;
+    width: 24px;
+    height: 24px;
     margin: auto 0;
   }
 
@@ -107,8 +112,7 @@ const MobileMenu = styled.div<{ isOpen: boolean }>`
     position: absolute;
     top: 0;
     left: 0;
-    background-color: #FFFFFF;
-    z-index: 5;
+    background-color: transparent;
     gap: 20px;
   }
 `;
@@ -142,7 +146,7 @@ export const Header = () => {
   return (
     <HeaderBox isOpen={isOpen}>
       <StyledHeaderContent>
-        <Link href="/" className="home-menu">
+        <Link href="/" className="home-menu" onClick={toggleMenu}>
           <Image src="/logo/logo.webp" width={150} height={150} alt={""} className="main-logo" />
         </Link>
         <MenuIcon onClick={toggleMenu}>
@@ -168,7 +172,7 @@ export const Header = () => {
         <MobileMenu isOpen={isOpen}>
           {links.map((link) => (
             <Link key={link.href} href={link.href}>
-              <StyledLink isActive={pathname === link.href} onClick={() => setIsOpen(!isOpen)}>
+              <StyledLink isActive={pathname === link.href} onClick={toggleMenu}>
                 {link.label}
               </StyledLink>
             </Link>
