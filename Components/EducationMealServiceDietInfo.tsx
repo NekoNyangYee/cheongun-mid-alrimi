@@ -57,21 +57,24 @@ const MenuContainer = styled.div(() => `
 `);
 
 const ScrollButton = styled.button`
-  background-color: #f0f0f0;
-  border: none;
-  padding: 10px 15px;
+  background-color: transparent;
+  border: 1px solid #E4E4E7;
+  padding: 8px;
   cursor: pointer;
-  margin: 5px;
-  border-radius: 5px;
-
-  &:hover {
-    background-color: #e0e0e0;
-  }
+  margin: 16px 0;
+  border-radius: 50px;
+  line-height: 0;
 
   &:disabled {
-    background-color: #ccc;
+    opacity: 0.5;
     cursor: not-allowed;
   }
+`;
+
+const ScrollBtnContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    gap: 16px;
 `;
 
 interface MealInfo {
@@ -196,8 +199,18 @@ const EducationMealServiceDietInfo = () => {
                     <p>다음 7일간 급식 정보가 없습니다.</p>
                 )}
             </WrapMealInfoContainer>
-            <ScrollButton onClick={() => scrollContainer(-200)} disabled={isLeftDisabled}>왼쪽</ScrollButton>
-            <ScrollButton onClick={() => scrollContainer(200)} disabled={isRightDisabled}>오른쪽</ScrollButton>
+            <ScrollBtnContainer>
+                <ScrollButton onClick={() => scrollContainer(-200)} disabled={isLeftDisabled}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M11.0538 12L15.1269 7.92689C15.2654 7.78844 15.3362 7.6144 15.3394 7.40479C15.3426 7.19519 15.2718 7.01795 15.1269 6.87309C14.982 6.7282 14.8064 6.65576 14.6 6.65576C14.3936 6.65576 14.218 6.7282 14.0731 6.87309L9.57889 11.3673C9.48529 11.4609 9.41926 11.5596 9.38081 11.6635C9.34235 11.7673 9.32311 11.8795 9.32311 12C9.32311 12.1205 9.34235 12.2327 9.38081 12.3365C9.41926 12.4404 9.48529 12.5391 9.57889 12.6327L14.0731 17.1269C14.2116 17.2654 14.3856 17.3362 14.5952 17.3394C14.8048 17.3426 14.982 17.2718 15.1269 17.1269C15.2718 16.982 15.3442 16.8064 15.3442 16.6C15.3442 16.3936 15.2718 16.218 15.1269 16.0731L11.0538 12Z" fill="#18181B" />
+                    </svg>
+                </ScrollButton>
+                <ScrollButton onClick={() => scrollContainer(200)} disabled={isRightDisabled}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M12.9462 12L8.87309 7.92689C8.73462 7.78844 8.66379 7.6144 8.66059 7.40479C8.65737 7.19519 8.7282 7.01795 8.87309 6.87309C9.01795 6.7282 9.19359 6.65576 9.39999 6.65576C9.60639 6.65576 9.78202 6.7282 9.92689 6.87309L14.4211 11.3673C14.5147 11.4609 14.5807 11.5596 14.6192 11.6635C14.6577 11.7673 14.6769 11.8795 14.6769 12C14.6769 12.1205 14.6577 12.2327 14.6192 12.3365C14.5807 12.4404 14.5147 12.5391 14.4211 12.6327L9.92689 17.1269C9.78844 17.2654 9.6144 17.3362 9.40479 17.3394C9.19519 17.3426 9.01795 17.2718 8.87309 17.1269C8.7282 16.982 8.65576 16.8064 8.65576 16.6C8.65576 16.3936 8.7282 16.218 8.87309 16.0731L12.9462 12Z" fill="#18181B" />
+                    </svg>
+                </ScrollButton>
+            </ScrollBtnContainer>
         </>
     );
 };
