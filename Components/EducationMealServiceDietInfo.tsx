@@ -29,21 +29,25 @@ const WrapMealInfoContainer = styled.div(() => `
 `);
 
 const MenuContainer = styled.div(() => `
+    display: flex;
+    flex-direction: column;
     padding: 1rem;
     border: 1px solid #E4E4E7;
     border-radius: 12px;
-    flex: 0 0 200px; 
+    width: 232px; 
     box-sizing: border-box; 
     justify-content: space-between;
     flex: 1 0 auto; 
     min-height: 100px;
-
+    gap: 16px;
+    
     & p {
-        margin: 1rem 0;
+        margin: 0;
         color: #71717A;
         font-weight: bold;
         font-size: 0.9rem;
         white-space: pre-wrap;
+        font-weight: normal;
     }
 
     & h2 {
@@ -114,7 +118,6 @@ const EducationMealServiceDietInfo = () => {
             }
         });
     };
-
 
     return (
         <>

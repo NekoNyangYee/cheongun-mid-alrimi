@@ -40,8 +40,8 @@ const HeaderBox = styled.div(({ isOpen }: { isOpen: boolean }) => `
   }
 
   & .main-logo {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
 
     @media (max-width: 972px) {
       margin: 0 auto;
@@ -54,11 +54,15 @@ const HeaderBox = styled.div(({ isOpen }: { isOpen: boolean }) => `
   }
 `);
 
-const StyledLink = styled.a<{ isActive: boolean }>`
-  text-decoration: none;
+const StyledLink = styled.button<{ isActive: boolean }>`
+  background-color: transparent;
+  border: none;
   color: ${({ isActive }) => (isActive ? "#000000" : "#71717A")};
+  border-bottom: ${({ isActive }) => (isActive ? "2px solid #000000" : "none")};
   font-size: 1rem;
   font-weight: ${({ isActive }) => (isActive ? "bold" : "normal")};
+  margin: 0;
+  cursor: pointer;
 `;
 
 const MenuIcon = styled.div`
@@ -154,16 +158,20 @@ export const Header = () => {
         </MenuIcon>
         <DesktopMenu>
           {links.map((link) => (
-            <StyledLink key={link.href} href={link.href} isActive={pathname === link.href}>
-              {link.label}
-            </StyledLink>
+            <Link key={link.href} href={link.href}>
+              <StyledLink isActive={pathname === link.href}>
+                {link.label}
+              </StyledLink>
+            </Link>
           ))}
         </DesktopMenu>
         <MobileMenu isOpen={isOpen}>
           {links.map((link) => (
-            <StyledLink key={link.href} href={link.href} isActive={pathname === link.href}>
-              {link.label}
-            </StyledLink>
+            <Link key={link.href} href={link.href}>
+              <StyledLink isActive={pathname === link.href} onClick={() => setIsOpen(!isOpen)}>
+                {link.label}
+              </StyledLink>
+            </Link>
           ))}
         </MobileMenu>
       </StyledHeaderContent>

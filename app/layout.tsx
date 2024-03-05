@@ -1,9 +1,12 @@
 import { Header } from "@/Components/header/Header";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Noto_Sans_KR } from "next/font/google";
 import StyledContent from "./style";
 
-const inter = Inter({ subsets: ["latin"] });
+const noto_sans_kr = Noto_Sans_KR({
+  subsets: ['latin'],
+  weight: ['100', '300', '400', '500', '700', '900'],
+});
 
 export const metadata: Metadata = {
   title: "청운중학교 통합 알리미",
@@ -17,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={noto_sans_kr.className}>
         <StyledContent >
           <Header />
           {children}
