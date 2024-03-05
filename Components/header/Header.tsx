@@ -37,7 +37,6 @@ const HeaderBox = styled.div(({ isOpen }: { isOpen: boolean }) => `
   display: flex;
   justify-content: space-between;
   z-index: 10;
-  transition: height 0.3s ease-in-out;
 
   & .home-menu {
     display: inline-block;
@@ -54,7 +53,7 @@ const HeaderBox = styled.div(({ isOpen }: { isOpen: boolean }) => `
     }
 
   @media (max-width: 972px) {
-    height: ${isOpen ? "100vh" : "8vh"};
+    height: ${isOpen ? "100vh" : "auto"};
     overflow: hidden;
   }
 `);

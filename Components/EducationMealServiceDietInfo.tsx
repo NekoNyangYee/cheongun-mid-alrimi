@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "@emotion/styled";
 
 const WrapMealUnfoTitle = styled.div(() => `
@@ -56,6 +56,24 @@ const MenuContainer = styled.div(() => `
     }
 `);
 
+const ScrollButton = styled.button`
+  background-color: #f0f0f0;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  margin: 5px;
+  border-radius: 5px;
+
+  &:hover {
+    background-color: #e0e0e0;
+  }
+
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+`;
+
 interface MealInfo {
     MLSV_YMD: string;
     DDISH_NM: string;
@@ -66,6 +84,9 @@ const EducationMealServiceDietInfo = () => {
     const [mealInfos, setMealInfos] = useState<MealInfo[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const wrapMealInfoContainerRef = useRef<HTMLDivElement>(null);
+    const [isLeftDisabled, setIsLeftDisabled] = useState<boolean>(true);
+    const [isRightDisabled, setIsRightDisabled] = useState<boolean>(true);
 
     useEffect(() => {
         const fetchMealData = async () => {
@@ -119,6 +140,34 @@ const EducationMealServiceDietInfo = () => {
         });
     };
 
+    useEffect(() => {
+        if (!isLoading) checkScrollPosition(); // 로딩이 완료된 후에 실행
+    }, [mealInfos, isLoading]); // 의존성 배열에 isLoading 추가
+
+    const checkScrollPosition = () => {
+        if (wrapMealInfoContainerRef.current) {
+            const { scrollLeft, scrollWidth, clientWidth } = wrapMealInfoContainerRef.current;
+            setIsLeftDisabled(scrollLeft <= 0);
+            setIsRightDisabled(scrollLeft + clientWidth >= scrollWidth - 1); // 정밀도 문제로 -1 또는 작은 값을 사용
+        }
+    };
+
+    const scrollContainer = (offset: number) => {
+        if (wrapMealInfoContainerRef.current) {
+            // 현재 스크롤 위치와 컨테이너의 너비를 계산하여 이동 거리 조절
+            const { scrollLeft, clientWidth, scrollWidth } = wrapMealInfoContainerRef.current;
+            let newScrollPosition = scrollLeft + offset;
+
+            if (newScrollPosition < 0) {
+                newScrollPosition = 0; // 왼쪽 끝으로 이동
+            } else if (newScrollPosition + clientWidth > scrollWidth) {
+                newScrollPosition = scrollWidth - clientWidth; // 오른쪽 끝으로 이동
+            }
+
+            wrapMealInfoContainerRef.current.scrollTo({ left: newScrollPosition, behavior: 'smooth' });
+            setTimeout(checkScrollPosition, 200); // 스크롤 이동 후 위치 확인
+        }
+    };
     return (
         <>
             <WrapMealUnfoTitle>
@@ -127,7 +176,7 @@ const EducationMealServiceDietInfo = () => {
                 </svg>
                 <MealTitle>급식 정보</MealTitle>
             </WrapMealUnfoTitle>
-            <WrapMealInfoContainer>
+            <WrapMealInfoContainer ref={wrapMealInfoContainerRef} onScroll={checkScrollPosition}>
                 {isLoading ? (
                     <p>Loading...</p>
                 ) : error ? (
@@ -147,6 +196,8 @@ const EducationMealServiceDietInfo = () => {
                     <p>다음 7일간 급식 정보가 없습니다.</p>
                 )}
             </WrapMealInfoContainer>
+            <ScrollButton onClick={() => scrollContainer(-200)} disabled={isLeftDisabled}>왼쪽</ScrollButton>
+            <ScrollButton onClick={() => scrollContainer(200)} disabled={isRightDisabled}>오른쪽</ScrollButton>
         </>
     );
 };
