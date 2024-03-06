@@ -90,7 +90,6 @@ export const ShortcutTab = () => {
             href: 'https://school.cbe.go.kr/cheongun-m/M010303/list',
             Icon: AlbumIcon,
         },
-        // 더 많은 탭 데이터를 이곳에 추가하세요.
     ];
     return (
         <WrapShortcutTabContainer>

@@ -84,9 +84,9 @@ const EducationSchedules = () => {
   const [error, setError] = useState<string | null>(null);
 
   const currentDate = new Date();
-  const currentYear = currentDate.getFullYear(); // 현재 년도
-  const currentMonth = currentDate.getMonth() + 1; // 현재 월
-  const currentDay = currentDate.getDate(); // 현재 일
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.getMonth() + 1;
+  const currentDay = currentDate.getDate();
   const formattedCurrentDate = `${currentYear}${currentMonth.toString().padStart(2, '0')}${currentDay.toString().padStart(2, '0')}`;
 
   useEffect(() => {
@@ -113,9 +113,7 @@ const EducationSchedules = () => {
             DISPLAY_DATE: `${parseInt(event.AA_YMD.substring(4, 6), 10)}월 ${parseInt(event.AA_YMD.substring(6), 10)}일`,
           }));
 
-        // 오늘 일정
         const todayEvents = filteredEvents.filter((event: { AA_YMD: string; }) => event.AA_YMD === formattedCurrentDate);
-        // 예정된 일정
         const upcomingEvents = filteredEvents.filter((event: { AA_YMD: number; }) => Number(event.AA_YMD) > Number(formattedCurrentDate)).slice(0, 2);
         setTodayEvents(todayEvents);
         setPastEvents(pastEvents);
@@ -146,7 +144,7 @@ const EducationSchedules = () => {
           </svg>
         </Link>
       </WrapScheduleTitle>
-      <h2>오늘 ({currentMonth}월 {currentDay}일)</h2>
+      <h2>오늘</h2>
       {todayEvents.length > 0 ? (
         <ul>
           {todayEvents.map((event, index) => (
