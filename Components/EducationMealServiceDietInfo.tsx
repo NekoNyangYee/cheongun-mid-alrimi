@@ -22,6 +22,10 @@ const WrapMealInfoContainer = styled.div(() => `
     text-align: center;
     overflow-x: scroll;
 
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
     & h1 {
         text-align: left;
         font-size: 1.2rem;
@@ -126,10 +130,10 @@ const EducationMealServiceDietInfo = () => {
 
     const fillMissingDates = (meals: MealInfo[], startDate: Date): MealInfo[] => {
         return Array.from({ length: 7 }).map((_, index) => {
-            const targetDate = new Date(startDate);
+            const targetDate: Date = new Date(startDate);
             targetDate.setDate(targetDate.getDate() + index);
-            const dateStr = `${targetDate.getFullYear()}${(targetDate.getMonth() + 1).toString().padStart(2, '0')}${targetDate.getDate().toString().padStart(2, '0')}`;
-            const mealForDate = meals.find(meal => meal.MLSV_YMD === dateStr);
+            const dateStr: string = `${targetDate.getFullYear()}${(targetDate.getMonth() + 1).toString().padStart(2, '0')}${targetDate.getDate().toString().padStart(2, '0')}`;
+            const mealForDate: MealInfo | undefined = meals.find(meal => meal.MLSV_YMD === dateStr);
 
             if (mealForDate) {
                 return mealForDate;
@@ -159,7 +163,7 @@ const EducationMealServiceDietInfo = () => {
         if (wrapMealInfoContainerRef.current) {
             // 현재 스크롤 위치와 컨테이너의 너비를 계산하여 이동 거리 조절
             const { scrollLeft, clientWidth, scrollWidth } = wrapMealInfoContainerRef.current;
-            let newScrollPosition = scrollLeft + offset;
+            let newScrollPosition: number = scrollLeft + offset;
 
             if (newScrollPosition < 0) {
                 newScrollPosition = 0; // 왼쪽 끝으로 이동

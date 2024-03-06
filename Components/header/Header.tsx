@@ -38,11 +38,6 @@ const HeaderBox = styled.div(({ isOpen }: { isOpen: boolean }) => `
   justify-content: space-between;
   z-index: 10;
 
-  & .home-menu {
-    display: inline-block;
-    line-height: 0;
-  }
-
    & .main-logo {
     width: 36px;
     height: 36px;
@@ -67,6 +62,7 @@ const StyledLink = styled.button<{ isActive: boolean }>`
   font-weight: ${({ isActive }) => (isActive ? "bold" : "normal")};
   margin: 0;
   cursor: pointer;
+  padding: 0;
 `;
 
 const MenuIcon = styled.div`
@@ -117,12 +113,13 @@ const MobileMenu = styled.div<{ isOpen: boolean }>`
 `;
 
 export const Header = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const pathname = usePathname();
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const links = [
+    { href: "/", label: "홈" },
     { href: "/info", label: "공지사항" },
     { href: "/schoolschedules", label: "학사일정" },
     { href: "/timetable", label: "시간표" },
@@ -145,9 +142,7 @@ export const Header = () => {
   return (
     <HeaderBox isOpen={isOpen}>
       <StyledHeaderContent>
-        <Link href="/" className="home-menu" onClick={toggleMenu}>
-          <Image src="/logo/logo.webp" width={150} height={150} alt={""} className="main-logo" />
-        </Link>
+        <Image src="/logo/logo.webp" width={150} height={150} alt={""} className="main-logo" />
         <MenuIcon onClick={toggleMenu}>
           {isOpen ? (
             <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 56 56" fill="none">
