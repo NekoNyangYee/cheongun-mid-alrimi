@@ -147,11 +147,7 @@ const EducationSchedules = () => {
         </Link>
       </WrapScheduleTitle>
       <h2>오늘 ({currentMonth}월 {currentDay}일)</h2>
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : error ? (
-        <p>{error}</p>
-      ) : todayEvents.length > 0 ? (
+      {todayEvents.length > 0 ? (
         <ul>
           {todayEvents.map((event, index) => (
             <li key={index}>{`${event.DISPLAY_DATE} - ${event.EVENT_NM}`}</li>

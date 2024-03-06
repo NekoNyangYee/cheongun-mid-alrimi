@@ -16,12 +16,6 @@ export const StyledContent = styled.main`
     text-decoration: none;
   }
 
-  @media (max-width: 768px) {
-    max-width: 90%;
-    flex-direction: column;
-    gap: 16px;
-  }
-
   @media (max-width: 972px) {
     max-width: 90%;
     flex-direction: column-reverse; // 세로로 역순 배치
