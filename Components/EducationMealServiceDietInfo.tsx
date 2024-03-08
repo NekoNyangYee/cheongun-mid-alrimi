@@ -157,33 +157,33 @@ const EducationMealServiceDietInfo = () => {
     };
 
     useEffect(() => {
-        // 스크롤 위치 확인 및 버튼 활성화 상태 업데이트 로직
-        const checkScrollPosition = () => {
-          if (wrapMealInfoContainerRef.current) {
-            const { scrollLeft, scrollWidth, clientWidth } = wrapMealInfoContainerRef.current;
-            setIsLeftDisabled(scrollLeft <= 0);
-            setIsRightDisabled(scrollLeft + clientWidth >= scrollWidth - 1); // 정밀도 문제로 -1 또는 작은 값을 사용
-          }
+        const checkScrollButtons = () => {
+            const container = wrapMealInfoContainerRef.current;
+            if (container) {
+                const isAtStart = container.scrollLeft <= 0;
+                const isAtEnd = container.scrollLeft + container.offsetWidth >= container.scrollWidth;
+                setIsLeftDisabled(isAtStart);
+                setIsRightDisabled(isAtEnd);
+            }
         };
-    
-        if (!isLoading) checkScrollPosition();
-      }, [mealInfos, isLoading, setIsLeftDisabled, setIsRightDisabled]);
+
+        // 초기 상태 체크와 스크롤 이벤트 리스너 등록
+        checkScrollButtons();
+        const container = wrapMealInfoContainerRef.current;
+        container?.addEventListener('scroll', checkScrollButtons);
+
+        // 컴포넌트 언마운트 시 이벤트 리스너 제거
+        return () => {
+            container?.removeEventListener('scroll', checkScrollButtons);
+        };
+    }, []);
 
     const scrollContainer = (offset: number) => {
         if (wrapMealInfoContainerRef.current) {
-            // 현재 스크롤 위치와 컨테이너의 너비를 계산하여 이동 거리 조절
-            const { scrollLeft, clientWidth, scrollWidth } = wrapMealInfoContainerRef.current;
-            let newScrollPosition: number = scrollLeft + offset;
-
-            if (newScrollPosition < 0) {
-                newScrollPosition = 0; // 왼쪽 끝으로 이동
-            } else if (newScrollPosition + clientWidth > scrollWidth) {
-                newScrollPosition = scrollWidth - clientWidth; // 오른쪽 끝으로 이동
-            }
-
-            wrapMealInfoContainerRef.current.scrollTo({ left: newScrollPosition, behavior: 'smooth' }); // 스크롤 이동 후 위치 확인
+            wrapMealInfoContainerRef.current.scrollBy({ left: offset, behavior: 'smooth' });
         }
     };
+
     return (
         <div>
             <WrapMealUnfoTitle>
