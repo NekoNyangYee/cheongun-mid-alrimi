@@ -156,33 +156,44 @@ const EducationMealServiceDietInfo = () => {
         });
     };
 
+    const checkScrollButtons = () => {
+        if (wrapMealInfoContainerRef.current) {
+            const { scrollLeft, scrollWidth, clientWidth } = wrapMealInfoContainerRef.current;
+            setIsLeftDisabled(scrollLeft <= 0);
+            setIsRightDisabled(scrollLeft + clientWidth >= scrollWidth);
+        }
+    };
+
     useEffect(() => {
-        const checkScrollButtons = () => {
-            const container = wrapMealInfoContainerRef.current;
-            if (container) {
-                const isAtStart = container.scrollLeft <= 0;
-                const isAtEnd = container.scrollLeft + container.offsetWidth >= container.scrollWidth;
-                setIsLeftDisabled(isAtStart);
-                setIsRightDisabled(isAtEnd);
-            }
-        };
-
-        // 초기 상태 체크와 스크롤 이벤트 리스너 등록
-        checkScrollButtons();
+        // 스크롤 이벤트 리스너 설정
         const container = wrapMealInfoContainerRef.current;
-        container?.addEventListener('scroll', checkScrollButtons);
+        if (container) {
+            container.addEventListener('scroll', checkScrollButtons);
 
-        // 컴포넌트 언마운트 시 이벤트 리스너 제거
-        return () => {
-            container?.removeEventListener('scroll', checkScrollButtons);
-        };
+            // 초기 상태 확인
+            checkScrollButtons();
+
+            // 컴포넌트 언마운트 시 이벤트 리스너 제거
+            return () => container.removeEventListener('scroll', checkScrollButtons);
+        }
     }, []);
 
     const scrollContainer = (offset: number) => {
         if (wrapMealInfoContainerRef.current) {
-            wrapMealInfoContainerRef.current.scrollBy({ left: offset, behavior: 'smooth' });
+            const { scrollLeft, clientWidth, scrollWidth } = wrapMealInfoContainerRef.current;
+            let newScrollPosition = scrollLeft + offset;
+    
+            // 오른쪽 끝으로 스크롤할 경우
+            if (newScrollPosition + clientWidth > scrollWidth) {
+                newScrollPosition = scrollWidth - clientWidth; // 오른쪽 끝에서 정확히 멈추도록 조정
+            } else if (newScrollPosition < 0) {
+                newScrollPosition = 0; // 왼쪽 끝에서 정확히 멈추도록 조정
+            }
+    
+            wrapMealInfoContainerRef.current.scrollTo({ left: newScrollPosition, behavior: 'smooth' });
         }
     };
+    
 
     return (
         <div>
