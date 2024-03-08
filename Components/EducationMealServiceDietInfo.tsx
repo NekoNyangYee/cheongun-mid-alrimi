@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import styled from "@emotion/styled";
+import { useMealInfoStore } from "@/app/Store/mealInfoStore";
 
 const WrapMealUnfoTitle = styled.div(() => `
     display: flex;
@@ -89,12 +90,19 @@ interface MealInfo {
 }
 
 const EducationMealServiceDietInfo = () => {
-    const [mealInfos, setMealInfos] = useState<MealInfo[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
-    const wrapMealInfoContainerRef = useRef<HTMLDivElement>(null);
-    const [isLeftDisabled, setIsLeftDisabled] = useState<boolean>(true);
-    const [isRightDisabled, setIsRightDisabled] = useState<boolean>(true);
+    const {
+        mealInfos,
+        isLoading,
+        error,
+        isLeftDisabled,
+        isRightDisabled,
+        setMealInfos,
+        setIsLoading,
+        setError,
+        setIsLeftDisabled,
+        setIsRightDisabled,
+      } = useMealInfoStore();
+      const wrapMealInfoContainerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const fetchMealData = async () => {
@@ -149,16 +157,17 @@ const EducationMealServiceDietInfo = () => {
     };
 
     useEffect(() => {
-        if (!isLoading) checkScrollPosition();
-    }, [mealInfos, isLoading]);
-
-    const checkScrollPosition = () => {
-        if (wrapMealInfoContainerRef.current) {
+        // 스크롤 위치 확인 및 버튼 활성화 상태 업데이트 로직
+        const checkScrollPosition = () => {
+          if (wrapMealInfoContainerRef.current) {
             const { scrollLeft, scrollWidth, clientWidth } = wrapMealInfoContainerRef.current;
             setIsLeftDisabled(scrollLeft <= 0);
             setIsRightDisabled(scrollLeft + clientWidth >= scrollWidth - 1); // 정밀도 문제로 -1 또는 작은 값을 사용
-        }
-    };
+          }
+        };
+    
+        if (!isLoading) checkScrollPosition();
+      }, [mealInfos, isLoading, setIsLeftDisabled, setIsRightDisabled]);
 
     const scrollContainer = (offset: number) => {
         if (wrapMealInfoContainerRef.current) {
@@ -172,8 +181,7 @@ const EducationMealServiceDietInfo = () => {
                 newScrollPosition = scrollWidth - clientWidth; // 오른쪽 끝으로 이동
             }
 
-            wrapMealInfoContainerRef.current.scrollTo({ left: newScrollPosition, behavior: 'smooth' });
-            setTimeout(checkScrollPosition, 200); // 스크롤 이동 후 위치 확인
+            wrapMealInfoContainerRef.current.scrollTo({ left: newScrollPosition, behavior: 'smooth' }); // 스크롤 이동 후 위치 확인
         }
     };
     return (

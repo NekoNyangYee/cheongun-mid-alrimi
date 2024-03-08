@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import Link from "next/link";
+import { useScheduleStore } from "@/app/Store/scheduleStore";
 
 const WrapSchoolScheduleContainer = styled.div(() => `
   display: flex;
@@ -77,11 +78,7 @@ interface EventData {
 }
 
 const EducationSchedules = () => {
-  const [todayEvents, setTodayEvents] = useState<EventData[]>([]);
-  const [pastEvents, setPastEvents] = useState<EventData[]>([]);
-  const [upcomingEvents, setUpcomingEvents] = useState<EventData[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const { todayEvents, upcomingEvents, setTodayEvents, setUpcomingEvents } = useScheduleStore();
 
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
@@ -91,8 +88,6 @@ const EducationSchedules = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoading(true);
-      setError(null);
       try {
         const OFFICE_CODE = process.env.NEXT_PUBLIC_OFFICE_CODE;
         const SCHOOL_CODE = process.env.NEXT_PUBLIC_SCHOOL_CODE;
@@ -116,12 +111,9 @@ const EducationSchedules = () => {
         const todayEvents = filteredEvents.filter((event: { AA_YMD: string; }) => event.AA_YMD === formattedCurrentDate);
         const upcomingEvents = filteredEvents.filter((event: { AA_YMD: number; }) => Number(event.AA_YMD) > Number(formattedCurrentDate)).slice(0, 2);
         setTodayEvents(todayEvents);
-        setPastEvents(pastEvents);
         setUpcomingEvents(upcomingEvents);
       } catch (error) {
-        setError(error instanceof Error ? error.message : 'An unknown error occurred');
-      } finally {
-        setIsLoading(false);
+        console.error(error);
       }
     };
 
