@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import styled from "@emotion/styled";
 import Link from "next/link";
 import { useScheduleStore } from "@/app/Store/scheduleStore";

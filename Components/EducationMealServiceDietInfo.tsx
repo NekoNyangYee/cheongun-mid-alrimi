@@ -93,12 +93,10 @@ const EducationMealServiceDietInfo = () => {
     const {
         mealInfos,
         isLoading,
-        error,
         isLeftDisabled,
         isRightDisabled,
         setMealInfos,
         setIsLoading,
-        setError,
         setIsLeftDisabled,
         setIsRightDisabled,
       } = useMealInfoStore();
@@ -107,7 +105,6 @@ const EducationMealServiceDietInfo = () => {
     useEffect(() => {
         const fetchMealData = async () => {
             setIsLoading(true);
-            setError(null);
 
             try {
                 const OFFICE_CODE = process.env.NEXT_PUBLIC_OFFICE_CODE;
@@ -128,7 +125,7 @@ const EducationMealServiceDietInfo = () => {
                     setMealInfos(filledMeals.slice(0, 7));
                 }
             } catch (error: any) {
-                setError('급식표를 준비중에요.');
+                console.error(error.message);
             } finally {
                 setIsLoading(false);
             }

@@ -9,12 +9,10 @@ interface MealInfo {
 interface MealInfoState {
   mealInfos: Array<MealInfo>;
   isLoading: boolean;
-  error: string | null;
   isLeftDisabled: boolean;
   isRightDisabled: boolean;
   setMealInfos: (mealInfos: Array<MealInfo>) => void;
   setIsLoading: (isLoading: boolean) => void;
-  setError: (error: string | null) => void;
   setIsLeftDisabled: (isDisabled: boolean) => void;
   setIsRightDisabled: (isDisabled: boolean) => void;
 }
@@ -22,12 +20,10 @@ interface MealInfoState {
 export const useMealInfoStore = create<MealInfoState>((set) => ({
   mealInfos: [],
   isLoading: true,
-  error: null,
   isLeftDisabled: true,
   isRightDisabled: true,
   setMealInfos: (mealInfos) => set({ mealInfos }),
   setIsLoading: (isLoading) => set({ isLoading }),
-  setError: (error) => set({ error }),
   setIsLeftDisabled: (isLeftDisabled) => set({ isLeftDisabled }),
   setIsRightDisabled: (isRightDisabled) => set({ isRightDisabled }),
 }));

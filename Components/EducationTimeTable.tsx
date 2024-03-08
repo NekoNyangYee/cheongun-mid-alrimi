@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { ClassInfoResponse } from "@/interfaces/Interface";
+import { useTimeTableStore } from "@/app/Store/timeTableStore";
 
 interface TimeTableData {
   PERIO: string;
@@ -22,16 +23,10 @@ interface ClassInfo {
 }
 
 const EducationTimeTable = () => {
-  const [timeTable, setTimeTable] = useState<TimeTableData[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [selection, setSelection] = useState<Selection>({ GRADE: "1", CLASS_NM: "1" });
-  const [availableClasses, setAvailableClasses] = useState<ClassInfo[]>([]);
-
+  const {timeTable, isLoading, selection, availableClasses, setTimeTable, setIsLoading, setSelection, setAvailableClasses} = useTimeTableStore();
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      setError(null);
       try {
         const OFFICE_CODE = process.env.NEXT_PUBLIC_OFFICE_CODE;
         const SCHOOL_CODE = process.env.NEXT_PUBLIC_SCHOOL_CODE;
@@ -67,7 +62,7 @@ const EducationTimeTable = () => {
         setAvailableClasses(classes);
 
       } catch (error) {
-        setError("시간표를 준비 중이에요. 잠시만 기다려주세요.");
+        console.error(error);
       } finally {
         setIsLoading(false);
       }
@@ -112,8 +107,6 @@ const EducationTimeTable = () => {
       </div>
       {isLoading ? (
         <p>Loading...</p>
-      ) : error ? (
-        <p>{error}</p>
       ) : timeTable.length > 0 ? (
         <table>
           <thead>
