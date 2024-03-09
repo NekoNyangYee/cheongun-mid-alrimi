@@ -220,8 +220,9 @@ const EducationMealServiceDietInfo = () => {
                         {isLoading ? (
                             <h2>날짜 불러오는 중..</h2>
                         ) : mealInfos[index] ? (
-                            <h2>{new Date(Number(mealInfos[index].MLSV_YMD.slice(0, 4)), parseInt(mealInfos[index].MLSV_YMD.slice(4, 6)) - 1, Number(mealInfos[index].MLSV_YMD.slice(6, 8)))
-                                .toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' }) + " 점심"}
+                            <h2>
+                                {new Date(Number(mealInfos[index].MLSV_YMD.slice(0, 4)), parseInt(mealInfos[index].MLSV_YMD.slice(4, 6)) - 1, Number(mealInfos[index].MLSV_YMD.slice(6, 8)))
+                                    .toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' }) + " 점심"}
                             </h2>
                         ) : (
                             <h2>날짜 정보 없음</h2>
