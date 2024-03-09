@@ -36,15 +36,27 @@ const WrapMealInfoContainer = styled.div(() => `
 const MenuContainer = styled.div(() => `
     display: flex;
     flex-direction: column;
+    justify-content: center; // 로딩 중 메시지를 중앙에 위치시키기 위해 추가
+    align-items: center; // 로딩 중 메시지를 중앙에 위치시키기 위해 추가
     padding: 1rem;
     border: 1px solid #E4E4E7;
     border-radius: 12px;
     width: 232px; 
+    height: 280px;
     box-sizing: border-box; 
     justify-content: space-between;
     flex: 1 0 auto; 
     min-height: 100px;
     gap: 16px;
+
+    & .menu-loading-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        gap: 8px;
+    }
     
     & p {
         margin: 0;
@@ -215,7 +227,9 @@ const EducationMealServiceDietInfo = () => {
                             <h2>날짜 정보 없음</h2>
                         )}
                         {isLoading ? (
-                            <p>급식 정보 불러오는 중...</p>
+                            <div className="menu-loading-container">
+                                <p>급식 정보 불러오는 중...</p>
+                            </div>
                         ) : mealInfos[index] ? (
                             <>
                                 <p>{mealInfos[index].DDISH_NM.replace(/<br\/>/g, '\n')}</p>

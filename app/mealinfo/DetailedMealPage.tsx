@@ -22,6 +22,8 @@ const StyledMealInfo = styled.div`
     line-height: 1.5;
     gap: 16px;
     justify-content: space-between;
+    overflow: hidden; // 내용이 넘칠 경우 숨김 처리
+    height: 300px; // 고정 높이 설정
 
     & h3 {
         margin: 0;
@@ -41,6 +43,7 @@ const StyledMealInfo = styled.div`
         font-size: 0.9rem;
         font-weight: normal;
         white-space: pre-line;
+        overflow: auto; // 내용이 넘칠 경우 스크롤 표시
     }
 
     & li {
@@ -54,9 +57,10 @@ const StyledMealInfo = styled.div`
 
 const MealInfoGrid = styled.div`
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); // 최소 250px, 사용 가능한 공간에 맞춰 자동으로 1fr로 조정
+    grid-template-columns: repeat(auto-fit, minmax(550px, 1fr)); // 최소 250px, 사용 가능한 공간에 맞춰 자동으로 1fr로 조정
     gap: 1rem; // 그리드 아이템 사이의 간격
     padding: 0;
+    grid-auto-rows: minmax(200px, auto);
 
     @media (min-width: 1024px) { // PC 해상도
         grid-template-columns: repeat(3, 1fr);
