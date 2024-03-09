@@ -18,7 +18,7 @@ export const StyledContent = styled.main`
 
   @media (max-width: 972px) {
     max-width: 90%;
-    flex-direction: column-reverse; // 세로로 역순 배치
+    flex-direction: column; // 세로로 역순 배치
     gap: 16px;
   }
 `;

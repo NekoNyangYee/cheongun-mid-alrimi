@@ -139,7 +139,7 @@ const EducationSchedules = () => {
       <h2>오늘</h2>
       {todayEvents.length > 0 ? (
         <ul>
-          {todayEvents.map((event, index) => (
+          {todayEvents.map((event: { DISPLAY_DATE: any; EVENT_NM: any; }, index: React.Key | null | undefined) => (
             <li key={index}>{`${event.DISPLAY_DATE} - ${event.EVENT_NM}`}</li>
           ))}
         </ul>
@@ -147,7 +147,7 @@ const EducationSchedules = () => {
       <h2>다가오는 일정</h2>
       {upcomingEvents.length > 0 ? (
         <ul>
-          {upcomingEvents.map((event, index) => (
+          {upcomingEvents.map((event: { DISPLAY_DATE: any; EVENT_NM: any; }, index: React.Key | null | undefined) => (
             <li key={index}>{`${event.DISPLAY_DATE} - ${event.EVENT_NM} `}</li>
           ))}
         </ul>
