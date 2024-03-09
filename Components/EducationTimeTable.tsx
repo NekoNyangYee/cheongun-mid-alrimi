@@ -1,26 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { ClassInfoResponse } from "@/interfaces/Interface";
+import React, { useEffect } from "react";
 import { useTimeTableStore } from "@/app/Store/timeTableStore";
-
-interface TimeTableData {
-  PERIO: string;
-  ITRT_CNTNT: string;
-  ALL_TI_YMD: string;
-  GRADE: string;
-  CLASS_NM: string;
-}
-
-interface Selection {
-  GRADE: string;
-  CLASS_NM: string;
-}
-
-interface ClassInfo {
-  GRADE: string;
-  CLASS_NM: string;
-}
 
 const EducationTimeTable = () => {
   const { timeTable, isLoading, selection, availableClasses, setTimeTable, setIsLoading, setSelection, setAvailableClasses } = useTimeTableStore();

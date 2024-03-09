@@ -49,7 +49,6 @@ const MenuContainer = styled.div(() => `
     & p {
         margin: 0;
         color: #71717A;
-        font-weight: bold;
         font-size: 0.9rem;
         white-space: pre-wrap;
         font-weight: normal;
@@ -83,7 +82,7 @@ const ScrollBtnContainer = styled.div`
     gap: 16px;
 `;
 
-interface MealInfo {
+export interface MealInfo {
     MLSV_YMD: string;
     DDISH_NM: string;
     CAL_INFO: string;
@@ -99,8 +98,9 @@ const EducationMealServiceDietInfo = () => {
         setIsLoading,
         setIsLeftDisabled,
         setIsRightDisabled,
-      } = useMealInfoStore();
-      const wrapMealInfoContainerRef = useRef<HTMLDivElement>(null);
+        setAllMealInfos,
+    } = useMealInfoStore();
+    const wrapMealInfoContainerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const fetchMealData = async () => {
@@ -111,8 +111,8 @@ const EducationMealServiceDietInfo = () => {
                 const SCHOOL_CODE = process.env.NEXT_PUBLIC_SCHOOL_CODE;
                 const API_KEY = process.env.NEXT_PUBLIC_MY_API_KEY;
                 const today = new Date();
-                const todayStr = `${today.getFullYear()}${(today.getMonth() + 1).toString().padStart(2, '0')}${today.getDate().toString().padStart(2, '0')}`;
-                const response = await fetch(`/api/education?endpoint=mealServiceDietInfo&KEY=${API_KEY}&Type=json&pIndex=1&pSize=365&ATPT_OFCDC_SC_CODE=${OFFICE_CODE}&SD_SCHUL_CODE=${SCHOOL_CODE}&MLSV_YMD=${today.getFullYear()}`);
+                const year = today.getFullYear().toString();
+                const response = await fetch(`/api/education?endpoint=mealServiceDietInfo&KEY=${API_KEY}&Type=json&pIndex=1&pSize=365&ATPT_OFCDC_SC_CODE=${OFFICE_CODE}&SD_SCHUL_CODE=${SCHOOL_CODE}&MLSV_YMD=${year}`);
 
                 if (!response.ok) {
                     throw new Error('데이터를 불러오는 중에 오류가 발생했습니다.');
@@ -120,19 +120,24 @@ const EducationMealServiceDietInfo = () => {
 
                 const data = await response.json();
                 if (data.mealServiceDietInfo && data.mealServiceDietInfo[1].row) {
-                    let meals: MealInfo[] = data.mealServiceDietInfo[1].row.filter((meal: { MLSV_YMD: string; }) => meal.MLSV_YMD >= todayStr);
-                    const filledMeals = fillMissingDates(meals, today);
-                    setMealInfos(filledMeals.slice(0, 7));
+                    // 전체 급식 정보와 이번주 급식 정보 모두를 상태에 저장
+                    const meals = data.mealServiceDietInfo[1].row;
+                    setAllMealInfos(meals); // 전체 급식 정보 저장
+
+                    const todayStr = today.toISOString().split('T')[0].replace(/-/g, '');
+                    const weekMeals = meals.filter((meal: { MLSV_YMD: string; }) => meal.MLSV_YMD >= todayStr);
+                    const filledMeals = fillMissingDates(weekMeals, today);
+                    setMealInfos(filledMeals.slice(0, 7)); // 이번주 급식 정보 저장
                 }
-            } catch (error: any) {
-                console.error(error.message);
+            } catch (error) {
+                console.error(error);
             } finally {
                 setIsLoading(false);
             }
         };
 
         fetchMealData();
-    }, []);
+    }, [setAllMealInfos, setMealInfos, setIsLoading]);
 
     const fillMissingDates = (meals: MealInfo[], startDate: Date): MealInfo[] => {
         return Array.from({ length: 7 }).map((_, index) => {
@@ -169,8 +174,6 @@ const EducationMealServiceDietInfo = () => {
 
             // 초기 상태 확인
             checkScrollButtons();
-
-            // 컴포넌트 언마운트 시 이벤트 리스너 제거
             return () => container.removeEventListener('scroll', checkScrollButtons);
         }
     }, []);
@@ -179,18 +182,17 @@ const EducationMealServiceDietInfo = () => {
         if (wrapMealInfoContainerRef.current) {
             const { scrollLeft, clientWidth, scrollWidth } = wrapMealInfoContainerRef.current;
             let newScrollPosition = scrollLeft + offset;
-    
+
             // 오른쪽 끝으로 스크롤할 경우
             if (newScrollPosition + clientWidth > scrollWidth) {
                 newScrollPosition = scrollWidth - clientWidth; // 오른쪽 끝에서 정확히 멈추도록 조정
             } else if (newScrollPosition < 0) {
                 newScrollPosition = 0; // 왼쪽 끝에서 정확히 멈추도록 조정
             }
-    
+
             wrapMealInfoContainerRef.current.scrollTo({ left: newScrollPosition, behavior: 'smooth' });
         }
     };
-    
 
     return (
         <div>

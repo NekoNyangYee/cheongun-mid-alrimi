@@ -1,9 +1,10 @@
 import React from "react";
+import DetailedMealPage from "./DetailedMealPage";
 
 const mealInfoPage = () => {
     return (
         <>
-            <h1>여기는 급식표</h1>
+            <DetailedMealPage />
         </>
     );
 }

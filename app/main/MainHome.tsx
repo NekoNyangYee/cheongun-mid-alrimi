@@ -27,6 +27,7 @@ const MainContent = styled.div`
   & hr {
     width: 100%;
     border: 1px solid #E4E4E7;
+    margin: 0;
   }
 
   @media (max-width: 972px) {
@@ -35,17 +36,17 @@ const MainContent = styled.div`
 `;
 
 export const MainHome = () => {
-    return (
-        <>
-            <MainContent>
-                <ShortcutTab />
-                <hr />
-                <EducationMealServiceDietInfo />
-            </MainContent>
-            <Sidebar>
-                <EducationSchedules />
-                <EducationTimeTable />
-            </Sidebar>
-        </>
-    );
+  return (
+    <>
+      <MainContent>
+        <ShortcutTab />
+        <hr />
+        <EducationMealServiceDietInfo />
+      </MainContent>
+      <Sidebar>
+        <EducationSchedules />
+        <EducationTimeTable />
+      </Sidebar>
+    </>
+  );
 }
