@@ -78,7 +78,7 @@ interface EventData {
 }
 
 const EducationSchedules = () => {
-  const { todayEvents, upcomingEvents, setTodayEvents, setUpcomingEvents } = useScheduleStore();
+  const { todayEvents, upcomingEvents, setTodayEvents, setUpcomingEvents, setMonthEvents } = useScheduleStore();
 
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
@@ -100,8 +100,10 @@ const EducationSchedules = () => {
           throw new Error('데이터를 불러오는 중에 오류가 발생했습니다.');
         }
         const data = await response.json();
+        const events = data.SchoolSchedule[1].row;
+        setMonthEvents(events);
 
-        const filteredEvents = data.SchoolSchedule[1].row
+        const filteredEvents = events
           .map((event: any) => ({
             EVENT_NM: event.EVENT_NM,
             AA_YMD: event.AA_YMD,

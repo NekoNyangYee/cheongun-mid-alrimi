@@ -43,27 +43,22 @@ const StyledMealInfo = styled.div`
         font-size: 0.9rem;
         font-weight: normal;
         white-space: pre-line;
-        overflow: auto; // 내용이 넘칠 경우 스크롤 표시
     }
 `;
 
 const MealInfoGrid = styled.div`
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(550px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
     padding: 0;
     margin: 20px 0;
     grid-auto-rows: minmax(200px, auto);
 
-    @media (min-width: 1024px) {
-        grid-template-columns: repeat(3, 1fr);
+    @media (max-width: 1024px) {
+        grid-template-columns: repeat(2, 1fr);
     }
-
-    @media (max-width: 868px) {
-        grid-template-columns: repeat(1, 1fr);
-    }
-
-    @media (max-width: 767px) {
+    
+    @media (max-width: 768px) {
         grid-template-columns: repeat(1, 1fr);
     }
 `;
@@ -85,6 +80,14 @@ const CurrentYMD = styled.p`
     color: #71717A;
     text-align: left;
 `;
+
+const InfoSentence = styled.p`
+  font-size: 0.9rem;
+  color: #71717A;
+  margin: 6px 0;
+  text-align: left;
+`;
+
 const DetailedMealPage = () => {
     const { allMealInfos, setAllMealInfos, setIsLoading } = useMealInfoStore();
 
@@ -145,6 +148,7 @@ const DetailedMealPage = () => {
                 <h2>{mealsIsMonth}월 급식 정보</h2>
             </AllMealInfoTitle>
             <CurrentYMD>{todayYMD}</CurrentYMD>
+            <InfoSentence>{mealsIsMonth}월 한달 간의 급식 정보에요.<br />급식 정보는 추후 변동될 수 있어요.</InfoSentence>
             <MealInfoGrid>
                 {mealsForMonth.length > 0 ? (
                     mealsForMonth.map((meal, index) => (

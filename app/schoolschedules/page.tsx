@@ -1,9 +1,10 @@
 import React from "react";
+import DetailedSchoolSchedules from "./DetailedSchoolSchcdules";
 
 const schoolSchedulesPage = () => {
     return (
         <>
-            <h1>여기는 학사일정</h1>
+            <DetailedSchoolSchedules />
         </>
     );
 }
