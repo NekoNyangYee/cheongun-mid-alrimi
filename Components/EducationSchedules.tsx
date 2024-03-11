@@ -71,30 +71,24 @@ const WrapScheduleTitle = styled.div(() => `
   }
 `);
 
-interface EventData {
-  EVENT_NM: string;
-  AA_YMD: string; // 'YYYYMMDD' 형식
-  DISPLAY_DATE: string; // 'YYYY년 MM월 DD일' 형식
-}
-
 const EducationSchedules = () => {
   const { todayEvents, upcomingEvents, setTodayEvents, setUpcomingEvents, setMonthEvents } = useScheduleStore();
 
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear();
-  const currentMonth = currentDate.getMonth() + 1;
-  const currentDay = currentDate.getDate();
-  const formattedCurrentDate = `${currentYear}${currentMonth.toString().padStart(2, '0')}${currentDay.toString().padStart(2, '0')}`;
+  const currentDate: Date = new Date();
+  const currentYear: number = currentDate.getFullYear();
+  const currentMonth: number = currentDate.getMonth() + 1;
+  const currentDay: number = currentDate.getDate();
+  const formattedCurrentDate: string = `${currentYear}${currentMonth.toString().padStart(2, '0')}${currentDay.toString().padStart(2, '0')}`;
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async (): Promise<void> => {
       try {
         const OFFICE_CODE = process.env.NEXT_PUBLIC_OFFICE_CODE;
         const SCHOOL_CODE = process.env.NEXT_PUBLIC_SCHOOL_CODE;
         const API_KEY = process.env.NEXT_PUBLIC_MY_API_KEY;
 
-        const startDateOfYear = `${currentYear}`;
-        const response = await fetch(`/api/education?endpoint=SchoolSchedule&KEY=${API_KEY}&ATPT_OFCDC_SC_CODE=${OFFICE_CODE}&SD_SCHUL_CODE=${SCHOOL_CODE}&AA_YMD=${startDateOfYear}`);
+        const startDateOfYear: string = `${currentYear}`;
+        const response: Response = await fetch(`/api/education?endpoint=SchoolSchedule&KEY=${API_KEY}&ATPT_OFCDC_SC_CODE=${OFFICE_CODE}&SD_SCHUL_CODE=${SCHOOL_CODE}&AA_YMD=${startDateOfYear}`);
 
         if (!response.ok) {
           throw new Error('데이터를 불러오는 중에 오류가 발생했습니다.');
@@ -110,8 +104,8 @@ const EducationSchedules = () => {
             DISPLAY_DATE: `${parseInt(event.AA_YMD.substring(4, 6), 10)}월 ${parseInt(event.AA_YMD.substring(6), 10)}일`,
           }));
 
-        const todayEvents = filteredEvents.filter((event: { AA_YMD: string; }) => event.AA_YMD === formattedCurrentDate);
-        const upcomingEvents = filteredEvents.filter((event: { AA_YMD: number; }) => Number(event.AA_YMD) > Number(formattedCurrentDate)).slice(0, 2);
+        const todayEvents: [] = filteredEvents.filter((event: { AA_YMD: string; }) => event.AA_YMD === formattedCurrentDate);
+        const upcomingEvents: [] = filteredEvents.filter((event: { AA_YMD: number; }) => Number(event.AA_YMD) > Number(formattedCurrentDate)).slice(0, 2);
         setTodayEvents(todayEvents);
         setUpcomingEvents(upcomingEvents);
       } catch (error) {

@@ -132,7 +132,7 @@ interface EventData {
 }
 
 interface MonthEvents {
-  [key: string]: EventData[];
+  [key: string]: Array<EventData>;
 }
 
 
@@ -140,21 +140,21 @@ const EducationSchedules = () => {
   const { monthEvents, setMonthEvents, sortedEvents, setSortedEvents, isLoading, setIsLoading } = useScheduleStore();
 
   const date: Date = new Date();
-  const CurrentYear = date.getFullYear();
+  const CurrentYear: number = date.getFullYear();
 
   useEffect(() => {
     setIsLoading(true);
-    const fetchEvents = async () => {
+    const fetchEvents = async (): Promise<void> => {
       const OFFICE_CODE = process.env.NEXT_PUBLIC_OFFICE_CODE!;
       const SCHOOL_CODE = process.env.NEXT_PUBLIC_SCHOOL_CODE!;
       const API_KEY = process.env.NEXT_PUBLIC_MY_API_KEY!;
-      let allEvents: EventData[] = [];
-      let pageIndex = 1;
-      const pageSize = 1000; // API 문서에 따라 설정
+      let allEvents: Array<EventData> = [];
+      let pageIndex: number = 1;
+      const pageSize: number = 1000; // API 문서에 따라 설정
 
       try {
         while (true) {
-          const response = await fetch(
+          const response: Response = await fetch(
             `/api/education?endpoint=SchoolSchedule&KEY=${API_KEY}&pIndex=${pageIndex}&pSize=${pageSize}&ATPT_OFCDC_SC_CODE=${OFFICE_CODE}&SD_SCHUL_CODE=${SCHOOL_CODE}&AA_YMD=${CurrentYear}`
           );
 
@@ -172,7 +172,7 @@ const EducationSchedules = () => {
         }
 
         // 여기에서 2024년 데이터 필터링 및 상태 업데이트
-        const filteredEvents = allEvents.filter(event => event.AA_YMD.startsWith(CurrentYear.toString()) && parseInt(event.AA_YMD.substring(0, 4)) === CurrentYear)
+        const filteredEvents: Array<EventData> = allEvents.filter(event => event.AA_YMD.startsWith(CurrentYear.toString()) && parseInt(event.AA_YMD.substring(0, 4)) === CurrentYear)
           .map(event => ({
             EVENT_NM: event.EVENT_NM,
             AA_YMD: event.AA_YMD,
@@ -196,7 +196,7 @@ const EducationSchedules = () => {
     // 월별로 데이터 분류
     const sortEventsByMonth = () => {
       const sorted: MonthEvents = monthEvents.reduce((acc: MonthEvents, event: EventData) => {
-        const month = event.AA_YMD.substring(4, 6);
+        const month: string = event.AA_YMD.substring(4, 6);
         if (!acc[month]) {
           acc[month] = [];
         }
@@ -210,7 +210,7 @@ const EducationSchedules = () => {
     sortEventsByMonth();
   }, [monthEvents]);
 
-  const sortedMonths = Object.keys(sortedEvents).sort((a, b) => parseInt(a) - parseInt(b));
+  const sortedMonths: Array<string> = Object.keys(sortedEvents).sort((a, b) => parseInt(a) - parseInt(b));
 
   return (
     <DetailedScheduleContainer>

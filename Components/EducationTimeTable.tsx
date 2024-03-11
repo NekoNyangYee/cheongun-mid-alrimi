@@ -6,21 +6,21 @@ import { useTimeTableStore } from "@/app/Store/timeTableStore";
 const EducationTimeTable = () => {
   const { timeTable, isLoading, selection, availableClasses, setTimeTable, setIsLoading, setSelection, setAvailableClasses } = useTimeTableStore();
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async (): Promise<void> => {
       setIsLoading(true);
       try {
         // 환경 변수에서 필요한 정보를 불러옵니다.
         const OFFICE_CODE = process.env.NEXT_PUBLIC_OFFICE_CODE;
         const SCHOOL_CODE = process.env.NEXT_PUBLIC_SCHOOL_CODE;
         const API_KEY = process.env.NEXT_PUBLIC_MY_API_KEY;
-        const currentYear = new Date().getFullYear().toString();
+        const currentYear: string = new Date().getFullYear().toString();
 
         // 현재 날짜를 YYMMDD 형식으로 변환합니다.
-        const today = new Date();
-        const todayStr = `${today.getFullYear()}${(today.getMonth() + 1).toString().padStart(2, '0')}${today.getDate().toString().padStart(2, '0')}`;
+        const today: Date = new Date();
+        const todayStr: string = `${today.getFullYear()}${(today.getMonth() + 1).toString().padStart(2, '0')}${today.getDate().toString().padStart(2, '0')}`;
 
         // classInfo 데이터를 불러옵니다.
-        const responseClassInfo = await fetch(`/api/education?endpoint=classInfo&KEY=${API_KEY}&ATPT_OFCDC_SC_CODE=${OFFICE_CODE}&SD_SCHUL_CODE=${SCHOOL_CODE}&AY=${currentYear}`);
+        const responseClassInfo: Response = await fetch(`/api/education?endpoint=classInfo&KEY=${API_KEY}&ATPT_OFCDC_SC_CODE=${OFFICE_CODE}&SD_SCHUL_CODE=${SCHOOL_CODE}&AY=${currentYear}`);
 
         if (!responseClassInfo.ok) {
           throw new Error('Failed to fetch classInfo data');
@@ -29,14 +29,14 @@ const EducationTimeTable = () => {
         const classInfoData = await responseClassInfo.json();
 
         // 현재 년도에 해당하는 데이터만 필터링합니다.
-        const validClasses = classInfoData.classInfo[1].row
+        const validClasses: [] = classInfoData.classInfo[1].row
           .filter((item: { AY: string; }) => item.AY === currentYear)
           .map((item: { GRADE: { toString: () => any; }; CLASS_NM: { toString: () => any; }; }) => ({ GRADE: item.GRADE.toString(), CLASS_NM: item.CLASS_NM.toString() }));
 
         setAvailableClasses(validClasses);
 
         // 선택된 학년과 반에 대한 시간표 데이터를 불러옵니다.
-        const responseMisTimetable = await fetch(`/api/education?endpoint=misTimetable&KEY=${API_KEY}&ATPT_OFCDC_SC_CODE=${OFFICE_CODE}&SD_SCHUL_CODE=${SCHOOL_CODE}&ALL_TI_YMD=${todayStr}&GRADE=${selection.GRADE}&CLASS_NM=${selection.CLASS_NM}`);
+        const responseMisTimetable: Response = await fetch(`/api/education?endpoint=misTimetable&KEY=${API_KEY}&ATPT_OFCDC_SC_CODE=${OFFICE_CODE}&SD_SCHUL_CODE=${SCHOOL_CODE}&ALL_TI_YMD=${todayStr}&GRADE=${selection.GRADE}&CLASS_NM=${selection.CLASS_NM}`);
 
         if (!responseMisTimetable.ok) {
           throw new Error('Failed to fetch misTimetable data');
@@ -59,9 +59,7 @@ const EducationTimeTable = () => {
     fetchData();
   }, [selection]);
 
-
-
-  const handleGradeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleGradeChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     setSelection({ ...selection, GRADE: e.target.value });
   };
 

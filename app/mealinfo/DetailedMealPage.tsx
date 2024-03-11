@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import { useMealInfoStore } from '@/app/Store/mealInfoStore';
 import styled from '@emotion/styled';
+import { MealInfo } from '@/Components/EducationMealServiceDietInfo';
 
 const PageContainer = styled.div`
   text-align: center;
@@ -95,13 +96,13 @@ const DetailedMealPage = () => {
         // allMealInfos가 비어 있을 때만 API 호출
         if (allMealInfos.length === 0) {
             setIsLoading(true);
-            const fetchMealData = async () => {
+            const fetchMealData = async (): Promise<void> => {
                 try {
                     const OFFICE_CODE = process.env.NEXT_PUBLIC_OFFICE_CODE;
                     const SCHOOL_CODE = process.env.NEXT_PUBLIC_SCHOOL_CODE;
                     const API_KEY = process.env.NEXT_PUBLIC_MY_API_KEY;
-                    const today = new Date();
-                    const response = await fetch(
+                    const today: Date = new Date();
+                    const response: Response = await fetch(
                         `/api/education?endpoint=mealServiceDietInfo&KEY=${API_KEY}&Type=json&pIndex=1&pSize=365&ATPT_OFCDC_SC_CODE=${OFFICE_CODE}&SD_SCHUL_CODE=${SCHOOL_CODE}&MLSV_YMD=${today.getFullYear()}`
                     );
                     if (!response.ok) {
@@ -122,15 +123,15 @@ const DetailedMealPage = () => {
         }
     }, [allMealInfos, setAllMealInfos, setIsLoading]);
 
-    const today = new Date();
-    const todayYMD = `${today.getFullYear()}년 ${(today.getMonth() + 1).toString().padStart(2, '0')}월 ${today.getDate().toString().padStart(2, '0')}일`;
-    const currentYearMonth = `${today.getFullYear()}${(today.getMonth() + 1).toString().padStart(2, '0')}`;
-    const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-    const mealsIsMonth = today.getMonth() + 1;
+    const today: Date = new Date();
+    const todayYMD: string = `${today.getFullYear()}년 ${(today.getMonth() + 1).toString().padStart(2, '0')}월 ${today.getDate().toString().padStart(2, '0')}일`;
+    const currentYearMonth: string = `${today.getFullYear()}${(today.getMonth() + 1).toString().padStart(2, '0')}`;
+    const daysInMonth: number = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+    const mealsIsMonth: number = today.getMonth() + 1;
 
-    const mealsForMonth = Array.from({ length: daysInMonth }).map((_, index) => {
-        const day = (index + 1).toString().padStart(2, '0');
-        const fullDate = `${currentYearMonth}${day}`;
+    const mealsForMonth: Array<MealInfo> = Array.from({ length: daysInMonth }).map((_, index) => {
+        const day: string = (index + 1).toString().padStart(2, '0');
+        const fullDate: string = `${currentYearMonth}${day}`;
         const mealForDay = allMealInfos.find(meal => meal.MLSV_YMD === fullDate);
         return mealForDay || {
             MLSV_YMD: fullDate,

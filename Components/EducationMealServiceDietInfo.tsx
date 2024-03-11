@@ -115,16 +115,16 @@ const EducationMealServiceDietInfo = () => {
     const wrapMealInfoContainerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const fetchMealData = async () => {
+        const fetchMealData = async (): Promise<void> => {
             setIsLoading(true);
 
             try {
                 const OFFICE_CODE = process.env.NEXT_PUBLIC_OFFICE_CODE;
                 const SCHOOL_CODE = process.env.NEXT_PUBLIC_SCHOOL_CODE;
                 const API_KEY = process.env.NEXT_PUBLIC_MY_API_KEY;
-                const today = new Date();
-                const year = today.getFullYear().toString();
-                const response = await fetch(`/api/education?endpoint=mealServiceDietInfo&KEY=${API_KEY}&Type=json&pIndex=1&pSize=365&ATPT_OFCDC_SC_CODE=${OFFICE_CODE}&SD_SCHUL_CODE=${SCHOOL_CODE}&MLSV_YMD=${year}`);
+                const today: Date = new Date();
+                const year: string = today.getFullYear().toString();
+                const response: Response = await fetch(`/api/education?endpoint=mealServiceDietInfo&KEY=${API_KEY}&Type=json&pIndex=1&pSize=365&ATPT_OFCDC_SC_CODE=${OFFICE_CODE}&SD_SCHUL_CODE=${SCHOOL_CODE}&MLSV_YMD=${year}`);
 
                 if (!response.ok) {
                     throw new Error('데이터를 불러오는 중에 오류가 발생했습니다.');
@@ -136,9 +136,9 @@ const EducationMealServiceDietInfo = () => {
                     const meals = data.mealServiceDietInfo[1].row;
                     setAllMealInfos(meals); // 전체 급식 정보 저장
 
-                    const todayStr = today.toISOString().split('T')[0].replace(/-/g, '');
-                    const weekMeals = meals.filter((meal: { MLSV_YMD: string; }) => meal.MLSV_YMD >= todayStr);
-                    const filledMeals = fillMissingDates(weekMeals, today);
+                    const todayStr: string = today.toISOString().split('T')[0].replace(/-/g, '');
+                    const weekMeals: [] = meals.filter((meal: { MLSV_YMD: string; }) => meal.MLSV_YMD >= todayStr);
+                    const filledMeals: Array<MealInfo> = fillMissingDates(weekMeals, today);
                     setMealInfos(filledMeals.slice(0, 7)); // 이번주 급식 정보 저장
                 }
             } catch (error) {
