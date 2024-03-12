@@ -2,6 +2,7 @@ import { Header } from "@/Components/header/Header";
 import type { Metadata } from "next";
 import { Noto_Sans_KR } from "next/font/google";
 import { StyledContent } from "./style";
+import { Footer } from "@/Components/footer/Footer";
 
 const noto_sans_kr = Noto_Sans_KR({
   subsets: ['latin'],
@@ -20,11 +21,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={noto_sans_kr.className}>
+      <body className={noto_sans_kr.className} style={{ margin: "0" }}>
         <StyledContent >
           <Header />
           {children}
         </StyledContent>
+        <Footer />
       </body>
     </html>
   );

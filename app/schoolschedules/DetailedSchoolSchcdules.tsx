@@ -86,7 +86,7 @@ const EventItem = styled.li`
 
   & h4, & p {
     margin: 0;
-    padding: 2px 0; // 내부 텍스트에 패딩 추가
+    padding: 2px 0;
   }
 
   & h4 {
