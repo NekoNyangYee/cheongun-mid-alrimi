@@ -11,7 +11,8 @@ import { ShortcutTab } from "@/Components/ShortcutTab";
 const Sidebar = styled.div`
   display: flex;
   flex-direction: column;
-  width: 30%; // 모바일 뷰에서는 너비를 100%로 설정
+  width: 30%;
+  gap: 1rem;
 
   @media (max-width: 972px) {
     width: 100%;
