@@ -16,7 +16,7 @@ export const StyledContent = styled.main`
     text-decoration: none;
   }
 
-  @media (max-width: 972px) {
+  @media (max-width: 1224px) {
     max-width: 90%;
     flex-direction: column; // 세로로 역순 배치
     gap: 16px;
