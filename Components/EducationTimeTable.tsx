@@ -60,8 +60,9 @@ const GradeClassNMSettingButton = styled.button`
 
 const GradeClassNMSelectButton = styled.button`
   padding: 8px 16px;
-  background-color: #F4F4F5;
-  border: 1px solid #E4E4E7;
+  background-color: #f4f4f5;
+  border: 1px solid #e4e4e7;
+  color: #71717a;
   cursor: pointer;
 `;
 
@@ -69,19 +70,36 @@ const SelectionContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   flex-wrap: wrap;
-  margin-top: 20px;
 `;
 
 const CurrentSelection = styled.div`
   border-radius: 4px;
   text-align: center;
   font-size: 0.9rem;
+  color: #71717a;
 `;
 
 const SelectGradeClassNMContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
+`;
+
+const PerioConatiner = styled.td`
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #71717a;
+`;
+
+const ClassContainer = styled.td`
+  width: 80%;
+  text-align: center;
+  background-color: #F4F4F5;
+  padding: 8px 0;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: bold;
 `;
 
 const EducationTimeTable = () => {
@@ -213,18 +231,7 @@ const EducationTimeTable = () => {
           </svg>
         </Link>
       </WrapTimeTableTitle>
-      {showSelection && (
-          <SelectionContainer>
-            {availableClasses.map((cls, index) => (
-              <GradeClassNMSelectButton
-                key={index}
-                onClick={() => handleSelection(cls.GRADE, cls.CLASS_NM)}
-              >
-                {cls.GRADE}학년 {cls.CLASS_NM}반
-              </GradeClassNMSelectButton>
-            ))}
-          </SelectionContainer>
-        )}
+
       <SelectGradeClassNMContainer>
         <CurrentSelection>
           {selection.GRADE}학년 {selection.CLASS_NM}반
@@ -244,24 +251,28 @@ const EducationTimeTable = () => {
           </svg>
         </GradeClassNMSettingButton>
       </SelectGradeClassNMContainer>
+      {showSelection && (
+        <SelectionContainer>
+          {availableClasses.map((cls, index) => (
+            <GradeClassNMSelectButton
+              key={index}
+              onClick={() => handleSelection(cls.GRADE, cls.CLASS_NM)}
+            >
+              {cls.GRADE}학년 {cls.CLASS_NM}반
+            </GradeClassNMSelectButton>
+          ))}
+        </SelectionContainer>
+      )}
       {isLoading ? (
         <p>Loading...</p>
       ) : timeTable.length > 0 ? (
         <table>
-          <thead>
-            <tr>
-              <th>교시</th>
-              <th>시간표</th>
-            </tr>
-          </thead>
-          <tbody>
             {timeTable.map((item, index) => (
               <tr key={index}>
-                <td>{item.PERIO}</td>
-                <td>{item.ITRT_CNTNT}</td>
+                <PerioConatiner>{item.PERIO}</PerioConatiner>
+                <ClassContainer>{item.ITRT_CNTNT}</ClassContainer>
               </tr>
             ))}
-          </tbody>
         </table>
       ) : (
         <p>오늘은 시간표가 없습니다.</p>

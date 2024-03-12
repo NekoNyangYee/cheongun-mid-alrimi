@@ -9,24 +9,18 @@ import EducationTimeTable from "@/Components/EducationTimeTable";
 import { ShortcutTab } from "@/Components/ShortcutTab";
 
 const Sidebar = styled.div`
-  display: grid;
+  display: flex;
   flex-direction: column;
-  grid-template-columns: repeat(1, 1fr);
-  width: 30%;
-  gap: 1rem;
+  width: 30%; // 모바일 뷰에서는 너비를 100%로 설정
+  gap: 24px;
 
   @media (max-width: 1224px) {
-    grid-template-columns: repeat(2, 1fr);
     width: 100%;
-  }
-
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(1, 1fr);
   }
 `;
 
 const MainContent = styled.div`
-  width: 70%;
+  width: 70%; // 모바일 뷰에서는 너비를 100%로 설정
   display: flex;
   flex-direction: column;
   gap: 24px;
