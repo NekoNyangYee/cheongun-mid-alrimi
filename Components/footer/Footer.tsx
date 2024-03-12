@@ -42,6 +42,10 @@ const FooterBox = styled.div`
     text-align: left;
     max-width: 70%;
     margin: 0 auto;
+
+    @media (max-width: 1224px) {
+        max-width: 100%;
+    }
 `;
 
 export const Footer = () => {
