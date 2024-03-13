@@ -80,14 +80,15 @@ const EventItem = styled.li`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 8px;
-  background-color: #F4F4F5;
+  background-color: #f4f4f5;
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 4px;
   justify-content: space-between;
 
   & h4,
   & p {
     margin: 0;
+    item-align: center;
   }
 
   & h4 {
@@ -102,7 +103,6 @@ const EventItem = styled.li`
 
   & path {
     line-height: 0;
-    fill: #F0D234;
   }
 `;
 
@@ -264,7 +264,7 @@ const EducationSchedules = () => {
       <InfoSentence>
         {CurrentYear}년도의 학사일정이에요.
         <br />
-        해당 일정은 추후 변동되거나 삭제/추가될 수 있어요.
+        해당 일정은 추후 변동되거나 삭제될 수 있어요.
       </InfoSentence>
       <WrapSchoolScheduleContainer>
         {sortedMonths.length > 0 ? (
@@ -290,9 +290,10 @@ const EducationSchedules = () => {
               ) : (
                 <EventList>
                   {sortedEvents[month].map((event, index) => (
-                    <EventItem key={index}> 
-                    <EventLogoAndDate>
-                    {event.EVENT_NM.includes("중간고사") || event.EVENT_NM.includes("기말고사") ? (
+                    <EventItem key={index}>
+                      <EventLogoAndDate>
+                        {event.EVENT_NM.includes("중간고사") ||
+                        event.EVENT_NM.includes("기말고사") ? (
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="25"
@@ -302,11 +303,52 @@ const EducationSchedules = () => {
                           >
                             <path
                               d="M19.7832 1.24341L18.5232 3.99341L15.7832 5.24341L18.5232 6.50341L19.7832 9.24341L21.0332 6.50341L23.7832 5.24341L21.0332 3.99341M9.7832 4.24341L7.2832 9.74341L1.7832 12.2434L7.2832 14.7434L9.7832 20.2434L12.2832 14.7434L17.7832 12.2434L12.2832 9.74341M19.7832 15.2434L18.5232 17.9834L15.7832 19.2434L18.5232 20.4934L19.7832 23.2434L21.0332 20.4934L23.7832 19.2434L21.0332 17.9834"
-                              fill="black"
+                              fill="#F0D234"
+                            />
+                          </svg>
+                        ) : event.EVENT_NM.includes("선거") ? (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="25"
+                            height="25"
+                            viewBox="0 0 25 25"
+                            fill="none"
+                          >
+                            <path
+                              d="M18.2937 13.7133H17.6137L15.6137 15.7133H17.5237L19.2937 17.7133H5.2937L7.0737 15.7133H9.1237L7.1237 13.7133H6.2937L3.2937 16.7133V20.7133C3.2937 21.2437 3.50441 21.7524 3.87949 22.1275C4.25456 22.5026 4.76327 22.7133 5.2937 22.7133H19.2937C19.8241 22.7133 20.3328 22.5026 20.7079 22.1275C21.083 21.7524 21.2937 21.2437 21.2937 20.7133V16.7133L18.2937 13.7133ZM17.2937 8.6633L12.3437 13.6133L8.7937 10.0733L13.7537 5.1233L17.2937 8.6633ZM13.0537 3.0033L6.6837 9.3733C6.2937 9.7633 6.2937 10.3933 6.6837 10.7833L11.6337 15.7133C12.0237 16.1233 12.6537 16.1233 13.0437 15.7133L19.4037 9.3733C19.7937 8.9833 19.7937 8.3533 19.4037 7.9633L14.4537 3.0133C14.0737 2.6133 13.4437 2.6133 13.0537 3.0033Z"
+                              fill="#FF5555"
+                            />
+                          </svg>
+                        ) : event.EVENT_NM.includes(
+                            "성탄절" || "크리스마스"
+                          ) ? (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                          >
+                            <path
+                              d="M19 12L12 2L5 12H6.86L3 18H10V22H14V18H21L17.14 12H19Z"
+                              fill="#00A110"
+                            />
+                          </svg>
+                        ) : event.EVENT_NM.includes("개교기념일") ? (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                          >
+                            <path
+                              d="M21 10H17V8L12.5 6.2V4H15V2H11.5V6.2L7 8V10H3C2.45 10 2 10.45 2 11V22H10V17H14V22H22V11C22 10.45 21.55 10 21 10ZM8 20H4V17H8V20ZM8 15H4V12H8V15ZM12 8C12.55 8 13 8.45 13 9C13 9.55 12.55 10 12 10C11.45 10 11 9.55 11 9C11 8.45 11.45 8 12 8ZM14 15H10V12H14V15ZM20 20H16V17H20V20ZM20 15H16V12H20V15Z"
+                              fill="#626262"
                             />
                           </svg>
                         ) : null}
-                      <h4>{event.DISPLAY_DATE}</h4>
+                        <h4>{event.DISPLAY_DATE}</h4>
                       </EventLogoAndDate>
                       <p>{event.EVENT_NM}</p>
                     </EventItem>
