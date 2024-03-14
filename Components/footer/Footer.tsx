@@ -4,6 +4,9 @@ import React from "react";
 import styled from "@emotion/styled";
 
 const StyledFooter = styled.footer`
+    position: relative;
+    bottom: 0;
+    width: 100%;
     justify-content: space-between;
     align-items: center;
     margin-top: 2rem;

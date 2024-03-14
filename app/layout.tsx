@@ -20,13 +20,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={noto_sans_kr.className} style={{ margin: "0" }}>
-        <StyledContent >
+    <html lang="ko">
+      <body className={noto_sans_kr.className} style={{ margin: "0", minHeight: "100vh", position: "relative" }}>
+        <StyledContent style={{ paddingBottom: "100px" }}>
           <Header />
           {children}
         </StyledContent>
-        <Footer />
+        <Footer/>
       </body>
     </html>
   );
