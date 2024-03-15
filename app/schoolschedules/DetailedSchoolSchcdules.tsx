@@ -22,16 +22,18 @@ const DetailedScheduleContainer = styled.div`
 
 const WrapSchoolScheduleContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
   align-items: start; // 각 월별 컨테이너의 시작점을 상단에 맞춥니다.
-  text-align: center;
+  text-align: left;
   width: 100%;
-  border: 1px solid #e1e1e1;
-  border-radius: 12px;
 
-  @media (max-width: 1024px) {
-    grid-template-columns: repeat(2, 1fr);
+  & h4, p {
+    margin: 0;
+  }
+
+  & p {
+    color: #71717A;
   }
 
   @media (max-width: 768px) {
@@ -39,28 +41,12 @@ const WrapSchoolScheduleContainer = styled.div`
   }
 `;
 
-const EventList = styled.ul`
-  display: grid;
-  list-style: none;
-  margin: 0;
-  padding: 1rem;
-  height: 300px;
-  overflow-y: auto;
+const EventItem = styled.div`
+  display: flex;
+  padding: 8px 1rem;
   gap: 8px;
-
-  &::-webkit-scrollbar {
-    width: 4px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    border-radius: 12px;
-    background-color: #f2f2f2;
-  }
-
-  &::-webkit-scrollbar-track {
-    border-radius: 3px;
-    background-color: tarnsparent;
-  }
+  flex-direction: column;
+  border-left: 2px solid #E4E4E7;
 `;
 
 const AllScheduleInfoTitle = styled.div`
@@ -90,14 +76,19 @@ const InfoSentence = styled.p`
 const PaginationButton = styled.button<{ isActive: boolean }>`
   padding: 0.5rem 1rem;
   border: none;
-  background-color: ${(props) => (props.isActive ? "#0075FF" : "#EFEFEF")};
+  height: auto;
+  background-color: ${(props) => (props.isActive ? "#000000" : "#EFEFEF")};
   color: ${(props) => (props.isActive ? "#FFFFFF" : "#000000")};
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
+  font-size: 0.9rem;
 `;
 
 
 const PaginationContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  height: 160px;
   justify-content: center;
   justify-content: flex-start;
   gap: 8px;
@@ -260,10 +251,10 @@ const EducationSchedules = () => {
       <WrapSchoolScheduleContainer>
         {filteredEventsBySelectedMonth.length > 0 &&
           filteredEventsBySelectedMonth.map((event, index) => (
-            <div key={index}>
+            <EventItem key={index}>
               <h4>{event.DISPLAY_DATE}</h4>
               <p>{event.EVENT_NM}</p>
-            </div>
+            </EventItem>
           ))}
       </WrapSchoolScheduleContainer>
       

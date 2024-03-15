@@ -19,6 +19,10 @@ const StyledHeaderContent = styled.div`
     & a {
       z-index: 10;
     }
+
+    @media (max-width: 1224px) {
+      max-width: 90%;
+    }
     
     @media (max-width: 972px) {
       flex-direction: column; // 변경: 모바일 뷰에서 컨텐츠를 세로로 정렬
