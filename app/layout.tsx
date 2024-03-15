@@ -1,7 +1,7 @@
 import { Header } from "@/Components/header/Header";
 import type { Metadata } from "next";
 import { Noto_Sans_KR } from "next/font/google";
-import { StyledContent } from "./style";
+import { Mainbody, StyledContent } from "./style";
 import { Footer } from "@/Components/footer/Footer";
 
 const noto_sans_kr = Noto_Sans_KR({
@@ -20,14 +20,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
-      <body className={noto_sans_kr.className} style={{ margin: "0", minHeight: "100vh", position: "relative" }}>
-        <StyledContent style={{ paddingBottom: "100px" }}>
+    <html lang="ko" style={{height: "100%"}}>
+      <Mainbody className={noto_sans_kr.className}>
+        <StyledContent>
           <Header />
           {children}
         </StyledContent>
-        <Footer/>
-      </body>
+        <Footer />
+      </Mainbody>
     </html>
   );
 }

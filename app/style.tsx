@@ -2,11 +2,19 @@
 
 import styled from "@emotion/styled"
 
+export const Mainbody = styled.body`
+  margin: 0;
+  height: 100%;
+`;
+
 export const StyledContent = styled.main`
+  display: flex;
+  flex-direction: column;
   margin: 0 auto;
   max-width: 70%;
   width: 100%;
-  padding-top: 90px;
+  min-height: calc(100% - 30px);
+  padding: 90px 0;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
