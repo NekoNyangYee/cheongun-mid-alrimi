@@ -125,7 +125,23 @@ export const DetailedTimetablePage = () => {
         fetchData();
     }, [selection, setIsLoading, setTimeTable, setAvailableClasses]);
 
+    const timetableByDate = timeTable.reduce<Record<string, any[]>>((acc, curr) => {
+        const date = curr.ALL_TI_YMD;
+        if (!acc[date]) {
+            acc[date] = [];
+        }
+        acc[date].push(curr);
+        return acc;
+    }, {});
 
+    // 날짜를 '월-일' 형식으로 변환하는 함수
+    const formatDate = (dateStr: string) => {
+        // YYYYMMDD 형식의 문자열을 가정합니다.
+        const month = dateStr.substring(4, 6);
+        const day = dateStr.substring(6, 8);
+
+        return `${parseInt(month)}월 ${parseInt(day)}일`;
+    };
 
     const handleGradeChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
         setSelection({ ...selection, GRADE: e.target.value });
@@ -134,13 +150,6 @@ export const DetailedTimetablePage = () => {
     const handleClassChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelection({ ...selection, CLASS_NM: e.target.value });
     };
-
-    // 요일별로 시간표 데이터를 분류하는 로직을 추가합니다.
-    const daysOfWeek = ["월", "화", "수", "목", "금"];
-    const timetableByDay = daysOfWeek.map(day => ({
-        day,
-        classes: timeTable.filter(classItem => new Date(classItem.ALL_TI_YMD).getDay() === daysOfWeek.indexOf(day) + 1)
-    }));
 
     return (
         <>
@@ -168,28 +177,29 @@ export const DetailedTimetablePage = () => {
                             ))}
                         </select>
                     </div>
-                    {timeTable && timeTable.length > 0 ? (
-                        <>
-                            <tbody>
-                                {timeTable.map((item, index) => (
-                                    <table key={index}>
-                                        <thead >
-                                            <tr>
-                                                <th>교시</th>
-                                                <th>수업 내용</th>
-                                            </tr>
-                                        </thead>
-                                        <tr >
-                                            <PeriodContainer>{item.PERIO}</PeriodContainer>
-                                            <ClassContainer>{item.ITRT_CNTNT}</ClassContainer>
+                    <WeekGrid>
+                        {Object.keys(timetableByDate).map((date) => (
+                            <DayContainer key={date}>
+                                <DayHeader>{formatDate(date)}</DayHeader>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>교시</th>
+                                            <th>수업 내용</th>
                                         </tr>
-                                    </table>
-                                ))}
-                            </tbody>
-                        </>
-                    ) : (
-                        <p>해당 기간 동안 시간표 정보가 없습니다.</p>
-                    )}
+                                    </thead>
+                                    <tbody>
+                                        {timetableByDate[date].map((item, index) => (
+                                            <tr key={index}>
+                                                <PeriodContainer>{item.PERIO}</PeriodContainer>
+                                                <ClassContainer>{item.ITRT_CNTNT}</ClassContainer>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </DayContainer>
+                        ))}
+                    </WeekGrid>
                 </>
             )}
         </>
