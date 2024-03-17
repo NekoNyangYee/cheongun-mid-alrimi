@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import { useMealInfoStore } from '@/app/Store/mealInfoStore';
 import styled from '@emotion/styled';
 import { MealInfo } from '@/Components/EducationMealServiceDietInfo';
+import { API_KEY, OFFICE_CODE, SCHOOL_CODE } from '../utils/constants';
 
 const PageContainer = styled.div`
   text-align: center;
@@ -98,9 +99,6 @@ const DetailedMealPage = () => {
             setIsLoading(true);
             const fetchMealData = async (): Promise<void> => {
                 try {
-                    const OFFICE_CODE = process.env.NEXT_PUBLIC_OFFICE_CODE;
-                    const SCHOOL_CODE = process.env.NEXT_PUBLIC_SCHOOL_CODE;
-                    const API_KEY = process.env.NEXT_PUBLIC_MY_API_KEY;
                     const today: Date = new Date();
                     const response: Response = await fetch(
                         `/api/education?endpoint=mealServiceDietInfo&KEY=${API_KEY}&Type=json&pIndex=1&pSize=365&ATPT_OFCDC_SC_CODE=${OFFICE_CODE}&SD_SCHUL_CODE=${SCHOOL_CODE}&MLSV_YMD=${today.getFullYear()}`

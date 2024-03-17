@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { useScheduleStore } from "@/app/Store/scheduleStore";
 import Image from "next/image";
+import { API_KEY, OFFICE_CODE, SCHOOL_CODE } from "../utils/constants";
 
 const WrapContainer = styled.div`
   display: grid;
@@ -67,7 +68,7 @@ const AllScheduleInfoTitle = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  justify-content: start;
+  justify-content: flex-start;
 
   & svg {
     width: 24px;
@@ -125,11 +126,10 @@ interface EventData {
 }
 
 const DetailedEducationSchedules = () => {
-  const { monthEvents, setMonthEvents, isLoading, setIsLoading } =
-    useScheduleStore();
+  const { monthEvents, setMonthEvents, isLoading, setIsLoading } = useScheduleStore();
   const date: Date = new Date();
   const CurrentYear: number = date.getFullYear();
-  const CurrentMonth = date.getMonth() + 1;
+  const CurrentMonth: number = date.getMonth() + 1;
 
   const [selectedMonth, setSelectedMonth] = useState(
     CurrentMonth.toString().padStart(2, "0")
@@ -150,9 +150,6 @@ const DetailedEducationSchedules = () => {
   useEffect(() => {
     setIsLoading(true);
     const fetchEvents = async (): Promise<void> => {
-      const OFFICE_CODE = process.env.NEXT_PUBLIC_OFFICE_CODE!;
-      const SCHOOL_CODE = process.env.NEXT_PUBLIC_SCHOOL_CODE!;
-      const API_KEY = process.env.NEXT_PUBLIC_MY_API_KEY!;
       let allEvents: Array<EventData> = [];
       let pageIndex: number = 1;
       const pageSize: number = 1000; // API 문서에 따라 설정
@@ -263,7 +260,6 @@ const DetailedEducationSchedules = () => {
           </WrapSchoolScheduleContainer>
         </WrapContainer>
       )}
-
     </DetailedScheduleContainer>
   );
 };

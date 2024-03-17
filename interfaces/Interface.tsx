@@ -1,18 +1,17 @@
 export interface BasicSchoolInfo {
-    ATPT_OFCDC_SC_CODE: string; // 교육청 코드
-    SD_SCHUL_CODE: string; // 학교 코드
+    ATPT_OFCDC_SC_CODE: string;
+    SD_SCHUL_CODE: string;
 }
 
 export interface BasicRequestParams extends BasicSchoolInfo {
-    KEY: string; // 인증키
-    Type: string; // 호출 문서 타입(xml, json)
-    pIndex: number; // 페이지 위치
-    pSize: number; // 페이지 당 신청 숫자
+    KEY: string;
+    Type: string;
+    pIndex: number;
 }
 
 export interface BasicDateRange {
-    AA_FROM_YMD?: string; // 시작 날짜
-    AA_TO_YMD?: string; // 종료 날짜
+    AA_FROM_YMD?: string;
+    AA_TO_YMD?: string;
 }
 
 export interface BasicResponse {
@@ -20,7 +19,7 @@ export interface BasicResponse {
     ATPT_OFCDC_SC_NM: string;
     SD_SCHUL_CODE: string;
     SCHUL_NM: string;
-    LOAD_DTM: string; // 데이터 로딩 일시
+    LOAD_DTM: string;
 }
 
 export interface TimeTableQueryParams extends BasicSchoolInfo {

@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import styled from "@emotion/styled";
 import Link from "next/link";
 import { useScheduleStore } from "@/app/Store/scheduleStore";
+import { API_KEY, OFFICE_CODE, SCHOOL_CODE } from "@/app/utils/constants";
 
 const WrapSchoolScheduleContainer = styled.div(() => `
   display: flex;
@@ -83,10 +84,6 @@ const EducationSchedules = () => {
   useEffect(() => {
     const fetchData = async (): Promise<void> => {
       try {
-        const OFFICE_CODE = process.env.NEXT_PUBLIC_OFFICE_CODE;
-        const SCHOOL_CODE = process.env.NEXT_PUBLIC_SCHOOL_CODE;
-        const API_KEY = process.env.NEXT_PUBLIC_MY_API_KEY;
-
         const startDateOfYear: string = `${currentYear}`;
         const response: Response = await fetch(`/api/education?endpoint=SchoolSchedule&KEY=${API_KEY}&ATPT_OFCDC_SC_CODE=${OFFICE_CODE}&SD_SCHUL_CODE=${SCHOOL_CODE}&AA_YMD=${startDateOfYear}`);
 
