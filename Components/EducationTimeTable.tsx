@@ -168,6 +168,10 @@ const EducationTimeTable = () => {
     };
 
     fetchData();
+
+    setAvailableClasses([]);
+    setTimeTable([]);
+    setIsLoading(true);
   }, [selection]);
 
 

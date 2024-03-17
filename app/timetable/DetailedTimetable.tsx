@@ -95,25 +95,22 @@ export const DetailedTimetablePage = () => {
                 const validClasses = classInfoData.classInfo[1].row.filter((item: { AY: string; }) => item.AY === currentYear);
 
                 setAvailableClasses(validClasses);
-
-                // 시간표 데이터를 불러오기 위해 수정된 요청 URL을 사용합니다.
                 // 요청 범위를 현재 주의 월요일부터 금요일까지로 설정합니다.
-                const responseTimetable = await fetch(
+                const responseDetailedTimetable = await fetch(
                     `/api/education?endpoint=misTimetable&KEY=${API_KEY}&ATPT_OFCDC_SC_CODE=${OFFICE_CODE}&SD_SCHUL_CODE=${SCHOOL_CODE}&GRADE=${selection.GRADE}&CLASS_NM=${selection.CLASS_NM}&TI_FROM_YMD=${startStr}&TI_TO_YMD=${endStr}`
                 );
 
-                if (!responseTimetable.ok) {
+                if (!responseDetailedTimetable.ok) {
                     throw new Error("Failed to fetch timetable data");
                 }
 
-                const timetableData = await responseTimetable.json();
+                const timetableData = await responseDetailedTimetable.json();
 
                 const filteredTimeTable = timetableData.misTimetable[1].row.filter((item: { ALL_TI_YMD: any; GRADE: string; CLASS_NM: string; }) =>
                     Number(item.ALL_TI_YMD) >= Number(startStr) && Number(item.ALL_TI_YMD) <= Number(endStr) &&
                     item.GRADE === selection.GRADE && item.CLASS_NM === selection.CLASS_NM
                 );
 
-                // API 응답에서 시간표 데이터를 추출하고 상태를 업데이트합니다.
                 setTimeTable(filteredTimeTable);
             } catch (error) {
                 console.error(error);
@@ -123,6 +120,10 @@ export const DetailedTimetablePage = () => {
         };
 
         fetchData();
+
+        setAvailableClasses([]);
+        setTimeTable([]);
+        setIsLoading(true);
     }, [selection, setIsLoading, setTimeTable, setAvailableClasses]);
 
     const timetableByDate = timeTable.reduce<Record<string, any[]>>((acc, curr) => {
@@ -136,7 +137,6 @@ export const DetailedTimetablePage = () => {
 
     // 날짜를 '월-일' 형식으로 변환하는 함수
     const formatDate = (dateStr: string) => {
-        // YYYYMMDD 형식의 문자열을 가정합니다.
         const month = dateStr.substring(4, 6);
         const day = dateStr.substring(6, 8);
 
