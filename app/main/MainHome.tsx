@@ -16,12 +16,6 @@ const Sidebar = styled.div`
 
   @media (max-width: 1224px) {
     width: 100%;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(1, 1fr);
   }
 `;
 
