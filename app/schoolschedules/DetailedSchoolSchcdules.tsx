@@ -108,7 +108,6 @@ const PaginationContainer = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
   height: 160px;
   justify-content: center;
-  justify-content: flex-start;
   gap: 8px;
 
   @media (max-width: 768px) {
