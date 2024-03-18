@@ -10,6 +10,7 @@ const WrapContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 2fr;
   gap: 32px;
+  margin: 1rem 0;
 
   @media (max-width: 768px) {
     grid-template-columns: repeat(1, 1fr);
@@ -17,7 +18,6 @@ const WrapContainer = styled.div`
 `;
 
 const DetailedScheduleContainer = styled.div`
-  text-align: center;
   align-items: center;
   width: 100%;
 `;
@@ -85,11 +85,10 @@ const InfoSentence = styled.p`
   font-size: 0.9rem;
   color: #71717a;
   margin: 6px 0;
-  text-align: left;
 `;
 
 const PaginationButton = styled.button<{ isActive: boolean }>`
-  padding: 0.5rem 1rem;
+  padding: 0.8rem 1.2rem;
   border: none;
   height: auto;
   background-color: ${(props) => (props.isActive ? "#000000" : "#EFEFEF")};
@@ -116,6 +115,7 @@ const PaginationContainer = styled.div`
     display: flex;
     height: auto;
     overflow-x: auto;
+    padding: 8px 0;
   }
 `;
 

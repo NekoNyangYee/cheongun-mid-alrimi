@@ -11,7 +11,6 @@ const WrapDetailedContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: start;
-    gap: 16px;
 
     & .detailed-timetable-title {
         display: flex;
@@ -48,6 +47,7 @@ const WeekGrid = styled.div`
 const DayContainer = styled.div`
     display: flex;
     flex-direction: column;
+    gap: 1rem;
     border: 1px solid #ddd;
     height: 500px;
     padding: 1rem;
@@ -58,6 +58,7 @@ const DayHeader = styled.p`
     width: 100%;
     font-size: 1.2rem;
     margin: 0;
+    font-weight: bold;
 `;
 
 const PeriodContainer = styled.td`
@@ -78,6 +79,7 @@ const ClassContainer = styled.td`
 
 const SelectGradeClassNMContainer = styled.div`
     display: flex;
+    margin: 20px 0;
     align-items: center;
     gap: 8px;
     justify-content: flex-start;
@@ -229,7 +231,6 @@ export const DetailedTimetablePage = () => {
                 <>
                     <SelectGradeClassNMContainer>
                         <Image src="/cog.svg" width={24} height={24} alt="시간표" />
-
                         <SelectOption value={selection.GRADE} onChange={handleGradeChange}>
                             {availableClasses.map((cls) => cls.GRADE).filter((value, index, self) => self.indexOf(value) === index).map((grade) => (
                                 <option key={grade} value={grade}>{grade}</option>
