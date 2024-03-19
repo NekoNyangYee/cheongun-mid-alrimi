@@ -91,10 +91,8 @@ const SelectGradeClassNMContainer = styled.div`
   display: flex;
   width: 40%;
   flex-direction: column;
-  margin: 20px 0;
   align-items: center;
   gap: 8px;
-  justify-content: flex-start;
 
   & .select-grade {
     display: flex;
@@ -146,8 +144,8 @@ const DateButtonContainer = styled.div`
 const DateButton = styled.button<{ isActive: boolean }>`
   white-space: nowrap;
   padding: 16px;
-  border: none;
-  background-color: ${(props) => (props.isActive ? "#000000" : "#EFEFEF")};
+  border: 1px solid ${(props) => (props.isActive ? "#000000" : "#EFEFEF")};
+  background-color: ${(props) => (props.isActive ? "#000000" : "transparent")};
   color: ${(props) => (props.isActive ? "#FFFFFF" : "#000000")};
   border-radius: 8px;
   cursor: pointer;
@@ -156,6 +154,7 @@ const DateButton = styled.button<{ isActive: boolean }>`
 const SelectGradeTitle = styled.div`
   display: flex;
   align-items: center;
+  justify-content: flex-start; /* 이 줄을 추가하세요 */
   gap: 8px;
 
   & h2 {

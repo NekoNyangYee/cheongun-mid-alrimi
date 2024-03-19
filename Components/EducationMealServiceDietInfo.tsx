@@ -191,7 +191,7 @@ const EducationMealServiceDietInfo = () => {
     const scrollContainer = (offset: number) => {
         if (wrapMealInfoContainerRef.current) {
             const { scrollLeft, clientWidth, scrollWidth } = wrapMealInfoContainerRef.current;
-            let newScrollPosition = scrollLeft + offset;
+            let newScrollPosition: number = scrollLeft + offset;
 
             // 오른쪽 끝으로 스크롤할 경우
             if (newScrollPosition + clientWidth > scrollWidth) {
