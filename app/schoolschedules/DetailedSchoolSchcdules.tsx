@@ -89,9 +89,9 @@ const InfoSentence = styled.p`
 
 const PaginationButton = styled.button<{ isActive: boolean }>`
   padding: 0.8rem 1.2rem;
-  border: none;
   height: auto;
-  background-color: ${(props) => (props.isActive ? "#000000" : "#EFEFEF")};
+  border: 1px solid ${(props) => (props.isActive ? "#000000" : "#EFEFEF")};
+  background-color: ${(props) => (props.isActive ? "#000000" : "transparent")};
   color: ${(props) => (props.isActive ? "#FFFFFF" : "#000000")};
   border-radius: 8px;
   cursor: pointer;

@@ -13,7 +13,7 @@ export const StyledContent = styled.main`
   margin: 0 auto;
   max-width: 70%;
   width: 100%;
-  min-height: calc(100% - 30px);
+  min-height: calc(100% - 120px);
   padding: 90px 0;
   display: flex;
   flex-direction: row;
@@ -28,6 +28,7 @@ export const StyledContent = styled.main`
     max-width: 90%;
     flex-direction: column; // 세로로 역순 배치
     gap: 16px;
+    min-height: calc(100% - 30%);
   }
 `;
 

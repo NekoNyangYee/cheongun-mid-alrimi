@@ -10,7 +10,7 @@ const StyledFooter = styled.footer`
     justify-content: space-between;
     align-items: center;
     background-color: #F4F4F5;
-    padding: 1.5rem;
+    padding: 1.5rem 0;
     text-align: center;
     box-sizing: border-box;
 
@@ -45,7 +45,7 @@ const FooterBox = styled.div`
     margin: 0 auto;
 
     @media (max-width: 1224px) {
-        max-width: 100%;
+        max-width: 90%;
     }
 `;
 

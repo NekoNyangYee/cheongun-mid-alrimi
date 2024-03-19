@@ -23,10 +23,12 @@ interface TimeTableState {
   isLoading: boolean;
   selection: Selection;
   availableClasses: Array<ClassInfo>;
+  selectedDate: string;
   setTimeTable: (timeTable: Array<TimeTableData>) => void;
   setIsLoading: (isLoading: boolean) => void;
   setSelection: (selection: Selection) => void;
   setAvailableClasses: (availableClasses: Array<ClassInfo>) => void;
+  setSelectedDate: (selectedDate: string) => void;
 }
 
 export const useTimeTableStore = create<TimeTableState>((set) => ({
@@ -37,8 +39,10 @@ export const useTimeTableStore = create<TimeTableState>((set) => ({
     CLASS_NM: '1',
   },
   availableClasses: [],
+  selectedDate: '',
   setTimeTable: (timeTable: Array<TimeTableData>) => set({ timeTable }),
   setIsLoading: (isLoading: boolean) => set({ isLoading }),
   setSelection: (selection: Selection) => set({ selection }),
   setAvailableClasses: (availableClasses: Array<ClassInfo>) => set({ availableClasses }),
+  setSelectedDate: (selectedDate: string) => set({ selectedDate }),
 }));
