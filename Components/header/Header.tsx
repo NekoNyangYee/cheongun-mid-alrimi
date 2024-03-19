@@ -77,8 +77,8 @@ const StyledLink = styled.button<{ isActive: boolean }>`
 const MenuIcon = styled.div`
   display: none;
   position: fixed;
-  top: 20px;
-  left: 20px;
+  top: 24px;
+  left: 24px;
   cursor: pointer;
   z-index: 20;
   line-height: 0;

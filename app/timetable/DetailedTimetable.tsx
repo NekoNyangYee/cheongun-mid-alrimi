@@ -7,21 +7,21 @@ import { useTimeTableStore } from "../Store/timeTableStore";
 import { API_KEY, OFFICE_CODE, SCHOOL_CODE } from "../utils/constants";
 
 const WrapTimeTableMainContainer = styled.div`
-    display: flex;
-    width: 100%;
-    gap: 32px;
-    margin: 1rem 0;
+  display: flex;
+  width: 100%;
+  gap: 16px;
+  margin: 1rem 0;
 
-    @media (max-width: 768px) {
-        flex-direction: column;
-    }
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 const WrapDetailedContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-items: flex-start;
 
   & .detailed-timetable-title {
     display: flex;
@@ -89,7 +89,7 @@ const ClassContainer = styled.td`
 
 const SelectGradeClassNMContainer = styled.div`
   display: flex;
-  width: 100%;
+  width: 40%;
   flex-direction: column;
   margin: 20px 0;
   align-items: center;
@@ -105,6 +105,10 @@ const SelectGradeClassNMContainer = styled.div`
   & label {
     font-size: 1rem;
     color: #71717a;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
   }
 `;
 
@@ -126,29 +130,38 @@ const SelectOption = styled.select`
 `;
 
 const DateButtonContainer = styled.div`
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    height: 10px;
-    justify-content: center;
-    gap: 8px;
-    width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+  width: 100%;
 
-    @media (max-width: 768px) {
-        display: flex;
-        height: auto;
-        overflow-x: auto;
-        padding: 8px 0;
-    }
+  @media (max-width: 768px) {
+    display: flex;
+    height: auto;
+    overflow-x: auto;
+    padding: 8px 0;
+  }
 `;
 
 const DateButton = styled.button<{ isActive: boolean }>`
-    white-space: nowrap;
-    padding: 8px 16px;
-    border: none;
-    background-color: ${(props) => (props.isActive ? "#000000" : "#EFEFEF")};
-    color: ${(props) => (props.isActive ? "#FFFFFF" : "#000000")};
-    border-radius: 8px;
-    cursor: pointer;
+  white-space: nowrap;
+  padding: 16px;
+  border: none;
+  background-color: ${(props) => (props.isActive ? "#000000" : "#EFEFEF")};
+  color: ${(props) => (props.isActive ? "#FFFFFF" : "#000000")};
+  border-radius: 8px;
+  cursor: pointer;
+`;
+
+const SelectGradeTitle = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  & h2 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
 `;
 
 export const DetailedTimetablePage = () => {
@@ -177,13 +190,47 @@ export const DetailedTimetablePage = () => {
     return { start: monday, end: friday };
   };
 
+  const getWeekDays = (baseDate: Date) => {
+    const date = new Date(baseDate);
+    const day = date.getDay();
+    const diff = date.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
+
+    return Array.from({ length: 5 }, (_, i) => {
+      const newDate = new Date(date.getFullYear(), date.getMonth(), diff + i);
+      return formatDateToYYYYMMDD(newDate);
+    });
+  };
+
+  const formatDateToYYYYMMDD = (date: Date) => {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    return `${year}${month}${day}`;
+  };
+
+  const formatToDay = (dateStr: any) => {
+    const [year, month, day] = [
+      dateStr.substring(0, 4),
+      dateStr.substring(4, 6) - 1,
+      dateStr.substring(6, 8),
+    ];
+    const date: Date = new Date(year, month, day);
+    return date.toLocaleDateString("ko-KR", { weekday: "long" });
+  };
+
+  const weekDays: Array<string> = getWeekDays(new Date());
+
+  const handleDateSelect = (dateStr: string) => {
+    setSelectedDate(dateStr);
+  };
+
   useEffect(() => {
     const fetchData = async (): Promise<void> => {
       setIsLoading(true);
       try {
         const currentYear: string = new Date().getFullYear().toString();
         // 현재 날짜를 YYYYMMDD 형식으로 포맷팅하는 로직
-        const todayFormatted = new Date()
+        const todayFormatted: string = new Date()
           .toISOString()
           .slice(0, 10)
           .replace(/-/g, "");
@@ -287,9 +334,6 @@ export const DetailedTimetablePage = () => {
     setSelection({ ...selection, CLASS_NM: e.target.value });
   };
 
-  const handleDateSelect = (date: any) => {
-    setSelectedDate(date);
-  };
   const filteredTimetable = selectedDate ? timetableByDate[selectedDate] : [];
 
   return (
@@ -307,37 +351,47 @@ export const DetailedTimetablePage = () => {
       ) : (
         <WrapTimeTableMainContainer>
           <SelectGradeClassNMContainer>
+            <SelectGradeTitle>
+              <Image src="/cog.svg" width={24} height={24} alt="시간표" />
+              <h2>학년/반 설정</h2>
+            </SelectGradeTitle>
             <div className="select-grade">
-            <Image src="/cog.svg" width={24} height={24} alt="시간표" />
-            <SelectOption value={selection.GRADE} onChange={handleGradeChange}>
-              {availableClasses
-                .map((cls) => cls.GRADE)
-                .filter((value, index, self) => self.indexOf(value) === index)
-                .map((grade) => (
-                  <option key={grade} value={grade}>
-                    {grade}
-                  </option>
-                ))}
-            </SelectOption>
-            <label htmlFor="grade-select">학년</label>
-            <SelectOption
-              value={selection.CLASS_NM}
-              onChange={handleClassChange}
-            >
-              {availableClasses
-                .filter((cls) => cls.GRADE === selection.GRADE)
-                .map((cls, index) => (
-                  <option key={index} value={cls.CLASS_NM}>
-                    {cls.CLASS_NM}
-                  </option>
-                ))}
-            </SelectOption>
-            <label htmlFor="class-select">반</label>
+              <SelectOption
+                value={selection.GRADE}
+                onChange={handleGradeChange}
+              >
+                {availableClasses
+                  .map((cls) => cls.GRADE)
+                  .filter((value, index, self) => self.indexOf(value) === index)
+                  .map((grade) => (
+                    <option key={grade} value={grade}>
+                      {grade}
+                    </option>
+                  ))}
+              </SelectOption>
+              <label htmlFor="grade-select">학년</label>
+              <SelectOption
+                value={selection.CLASS_NM}
+                onChange={handleClassChange}
+              >
+                {availableClasses
+                  .filter((cls) => cls.GRADE === selection.GRADE)
+                  .map((cls, index) => (
+                    <option key={index} value={cls.CLASS_NM}>
+                      {cls.CLASS_NM}
+                    </option>
+                  ))}
+              </SelectOption>
+              <label htmlFor="class-select">반</label>
             </div>
             <DateButtonContainer>
-              {Object.keys(timetableByDate).map((date) => (
-                <DateButton key={date} onClick={() => handleDateSelect(date)} isActive={date === selectedDate}>
-                  {formatDate(date)}
+              {weekDays.map((day, index) => (
+                <DateButton
+                  key={index}
+                  onClick={() => handleDateSelect(day)}
+                  isActive={day === selectedDate}
+                >
+                  {formatToDay(day)}
                 </DateButton>
               ))}
             </DateButtonContainer>
