@@ -10,7 +10,7 @@ import Link from "next/link";
 const WrapTimeTableMainContainer = styled.div`
   display: flex;
   width: 100%;
-  gap: 32px;
+  gap: 1rem;
   margin: 1rem 0;
 
   @media (max-width: 768px) {
@@ -45,7 +45,7 @@ const WrapDetailedContainer = styled.div`
 const InfoSentence = styled.p`
   color: #71717a;
   font-size: 0.9rem;
-  margin: 0;
+  margin: 8px 0;
 
     & span {
         color: #000000;
@@ -54,10 +54,6 @@ const InfoSentence = styled.p`
 
 const WeekGrid = styled.div`
   width: 100%;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 16px;
-  margin-top: 20px;
 `;
 
 const DayContainer = styled.div`
@@ -95,9 +91,13 @@ const ClassContainer = styled.td`
 const SelectGradeClassNMContainer = styled.div`
   display: flex;
   width: 40%;
+  box-sizing: border-box;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+  border: 1px solid #E4E4E7;
+  border-radius: 12px;
+  padding: 1rem;
 
   & .select-grade {
     display: flex;
@@ -110,6 +110,12 @@ const SelectGradeClassNMContainer = styled.div`
   & label {
     font-size: 1rem;
     color: #71717a;
+  }
+
+  & hr {
+    width: 100%;
+    border: 1px solid #E4E4E7;
+    margin: 0;
   }
 
   @media (max-width: 768px) {
@@ -434,8 +440,9 @@ export const DetailedTimetablePage = () => {
                             </SelectOption>
                             <label htmlFor="class-select">반</label>
                         </div>
+                        <hr />
                         <SelectGradeTitle>
-                            <Image src="/cog.svg" width={24} height={24} alt="시간표" />
+                            <Image src="/select-date.svg" width={24} height={24} alt="시간표" />
                             <h2>요일 선택</h2>
                         </SelectGradeTitle>
                         <DateButtonContainer>

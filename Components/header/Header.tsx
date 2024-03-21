@@ -72,6 +72,11 @@ const StyledLink = styled.button<{ isActive: boolean }>`
   margin: 0;
   cursor: pointer;
   padding: 0;
+
+  @media (max-width: 972px) {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
 `;
 
 const MenuIcon = styled.div`
@@ -129,7 +134,6 @@ export const Header = () => {
 
   const links = [
     { href: "/", label: "홈" },
-    { href: "/info", label: "공지사항" },
     { href: "/schoolschedules", label: "학사일정" },
     { href: "/timetable", label: "시간표" },
     { href: "/mealinfo", label: "급식표" },

@@ -40,6 +40,11 @@ const WrapShortcutTabContainer = styled.div`
         text-decoration: none;
         flex-direction: column;
         gap: 8px;
+
+        @media (max-width: 768px) {
+            font-size: 0.78rem;
+        
+        }
     }
 `;
 

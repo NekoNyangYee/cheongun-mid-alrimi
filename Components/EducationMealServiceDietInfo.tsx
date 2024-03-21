@@ -22,7 +22,7 @@ const WrapMealInfoContainer = styled.div(() => `
     border-radius: 10px;
     background-color: #FFFFFF;
     text-align: center;
-    overflow-x: scroll;
+    overflow-x: auto;
 
     &::-webkit-scrollbar {
         display: none;
@@ -43,7 +43,7 @@ const MenuContainer = styled.div(() => `
     border: 1px solid #E4E4E7;
     border-radius: 12px;
     width: 232px; 
-    height: 280px;
+    height: auto;
     box-sizing: border-box; 
     justify-content: space-between;
     flex: 1 0 auto; 
@@ -55,8 +55,6 @@ const MenuContainer = styled.div(() => `
         flex-direction: column;
         align-items: center;
         justify-content: center;
-
-        gap: 8px;
     }
     
     & p {

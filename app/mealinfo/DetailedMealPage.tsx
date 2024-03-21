@@ -28,6 +28,15 @@ const StyledMealInfo = styled.div`
     overflow: hidden; // 내용이 넘칠 경우 숨김 처리
     height: 300px; // 고정 높이 설정
 
+    &.active {
+        border: none;
+        background-color: #E6F2FF;
+
+        & p, h3 {
+            color: #00356F;
+        }
+    }
+
     & h3 {
         margin: 0;
         font-size: 1rem;
@@ -123,6 +132,7 @@ const DetailedMealPage = () => {
     }, [allMealInfos, setAllMealInfos, setIsLoading]);
 
     const today: Date = new Date();
+    const todayYYMMD: string = `${today.getFullYear()}${(today.getMonth() + 1).toString().padStart(2, '0')}${today.getDate().toString().padStart(2, '0')}`;
     const todayYMD: string = `${today.getFullYear()}년 ${(today.getMonth() + 1).toString().padStart(2, '0')}월 ${today.getDate().toString().padStart(2, '0')}일`;
     const currentYearMonth: string = `${today.getFullYear()}${(today.getMonth() + 1).toString().padStart(2, '0')}`;
     const daysInMonth: number = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
@@ -150,7 +160,7 @@ const DetailedMealPage = () => {
             <MealInfoGrid>
                 {mealsForMonth.length > 0 ? (
                     mealsForMonth.map((meal, index) => (
-                        <StyledMealInfo key={index}>
+                        <StyledMealInfo key={index} className={meal.MLSV_YMD === todayYYMMD ? "active" : ""}>
                             <h3>{new Date(Number(meal.MLSV_YMD.slice(0, 4)), parseInt(meal.MLSV_YMD.slice(4, 6)) - 1, Number(meal.MLSV_YMD.slice(6, 8)))
                                 .toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' }) + " 점심"}</h3>
                             <p>{meal.DDISH_NM.replace(/<br\/>/g, '\n')}</p>

@@ -92,6 +92,7 @@ const SelectOption = styled.select`
 `;
 
 
+
 const EducationTimeTable = () => {
   const {
     timeTable,
@@ -181,17 +182,7 @@ const EducationTimeTable = () => {
 
 
   const handleGradeChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
-    const newGrade = e.target.value;
-    // 새로운 학년에 따른 반 목록 필터링
-    const classesInNewGrade = availableClasses.filter(
-      (cls) => cls.GRADE === newGrade
-    );
-
-    // 클래스 목록이 비어있지 않은지 확인하고, 비어있다면 기본값으로 처리
-    const newClassNm =
-      classesInNewGrade.length > 0 ? classesInNewGrade[0].CLASS_NM : "기본값";
-
-    setSelection({ ...selection, GRADE: newGrade, CLASS_NM: newClassNm });
+    setSelection({ ...selection, GRADE: e.target.value });
   };
 
   const handleClassChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -248,7 +239,7 @@ const EducationTimeTable = () => {
         반
       </SelectGradeClassNMContainer>
       {isLoading ? (
-        <p>Loading...</p>
+        <p>시간표를 불러오는 중...</p>
       ) : timeTable.length > 0 ? (
         <table>
           <tbody>
