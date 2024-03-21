@@ -239,7 +239,7 @@ const EducationTimeTable = () => {
         반
       </SelectGradeClassNMContainer>
       {isLoading ? (
-        <p>시간표를 불러오는 중...</p>
+        <p>Loading...</p>
       ) : timeTable.length > 0 ? (
         <table>
           <tbody>

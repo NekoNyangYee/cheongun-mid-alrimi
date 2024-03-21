@@ -192,6 +192,13 @@ const GotoContainer = styled.div`
         gap: 1rem;
     }
 
+    &:hover {
+        & .arrow-right {
+            position: relative;
+            left: 8px; 
+        }
+    }
+
     & span {
         display: block;
         font-weight: bold;
@@ -486,7 +493,7 @@ export const DetailedTimetablePage = () => {
                                 <span>학사일정 확인하기</span>
                             </InfoSentence>
                         </div>
-                        <Image src="/right-arrow.svg" width={24} height={24} alt="arrow-right" />
+                        <Image src="/right-arrow.svg" width={24} height={24} alt="arrow-right" className="arrow-right" />
                     </GotoContainer>
                 </Link>
                 <Link href="/mealinfo" style={{ display: "block", width: "100%" }}>
@@ -498,7 +505,7 @@ export const DetailedTimetablePage = () => {
                                 <span>식단표 확인하기</span>
                             </InfoSentence>
                         </div>
-                        <Image src="/right-arrow.svg" width={24} height={24} alt="arrow-right" />
+                        <Image src="/right-arrow.svg" width={24} height={24} alt="arrow-right" className="arrow-right" />
                     </GotoContainer>
                 </Link>
             </WrapMoreInfoContainer>
