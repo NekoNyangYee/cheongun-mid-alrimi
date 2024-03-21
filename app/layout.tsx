@@ -21,6 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" style={{ height: "100%" }}>
+      <link rel="manifest" href="/manifest.json" />
       <Mainbody className={noto_sans_kr.className}>
         <StyledContent>
           <Header />
