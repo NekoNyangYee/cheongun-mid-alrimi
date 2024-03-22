@@ -257,7 +257,7 @@ export const DetailedTimetablePage = () => {
         const diff = date.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
 
         return Array.from({ length: 5 }, (_, i) => {
-            const newDate = new Date(date.getFullYear(), date.getMonth(), diff + i);
+            const newDate: Date = new Date(date.getFullYear(), date.getMonth(), diff + i);
             return formatDateToYYYYMMDD(newDate);
         });
     };
