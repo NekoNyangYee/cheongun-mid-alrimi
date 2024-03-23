@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useMealInfoStore } from '@/app/Store/mealInfoStore';
 import styled from '@emotion/styled';
 import { MealInfo } from '@/Components/EducationMealServiceDietInfo';
@@ -25,8 +25,8 @@ const StyledMealInfo = styled.div`
     line-height: 1.5;
     gap: 16px;
     justify-content: space-between;
-    overflow: hidden; // 내용이 넘칠 경우 숨김 처리
-    height: 300px; // 고정 높이 설정
+    overflow: hidden;
+    height: 300px;
 
     &.active {
         border: none;
@@ -102,6 +102,7 @@ const InfoSentence = styled.p`
 
 const DetailedMealPage = () => {
     const { allMealInfos, setAllMealInfos, setIsLoading } = useMealInfoStore();
+    const todayRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         // allMealInfos가 비어 있을 때만 API 호출
@@ -149,6 +150,13 @@ const DetailedMealPage = () => {
         };
     });
 
+    useEffect(() => {
+        // 컴포넌트가 마운트된 후에만 실행되도록 합니다.
+        if (todayRef.current) {
+            todayRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }, []);
+
     return (
         <PageContainer>
             <AllMealInfoTitle>
@@ -160,7 +168,7 @@ const DetailedMealPage = () => {
             <MealInfoGrid>
                 {mealsForMonth.length > 0 ? (
                     mealsForMonth.map((meal, index) => (
-                        <StyledMealInfo key={index} className={meal.MLSV_YMD === todayYYMMD ? "active" : ""}>
+                        <StyledMealInfo key={index} ref={meal.MLSV_YMD === todayYYMMD ? todayRef : null} className={meal.MLSV_YMD === todayYYMMD ? "active" : ""}>
                             <h3>{new Date(Number(meal.MLSV_YMD.slice(0, 4)), parseInt(meal.MLSV_YMD.slice(4, 6)) - 1, Number(meal.MLSV_YMD.slice(6, 8)))
                                 .toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' }) + " 점심"}</h3>
                             <p>{meal.DDISH_NM.replace(/<br\/>/g, '\n')}</p>

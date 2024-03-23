@@ -43,7 +43,6 @@ const WrapShortcutTabContainer = styled.div`
 
         @media (max-width: 768px) {
             font-size: 0.78rem;
-        
         }
     }
 `;

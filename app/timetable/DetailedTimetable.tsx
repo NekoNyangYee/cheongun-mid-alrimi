@@ -242,29 +242,30 @@ export const DetailedTimetablePage = () => {
     const getWeekStartAndEnd = (date: Date) => {
         const currentDate: Date = new Date(date);
         const weekDay: number = currentDate.getDay();
-        const diffToMonday: number =
-            currentDate.getDate() - weekDay + (weekDay === 0 ? -6 : 1);
+        // 주의 시작을 월요일로 설정 (weekDay === 0 ? -6 : 1)는 일요일일 경우 -6을 더하여 이전 주의 월요일로 설정
+        const diffToMonday: number = currentDate.getDate() - weekDay + (weekDay === 0 ? -6 : 1);
         const monday: Date = new Date(currentDate.setDate(diffToMonday));
-        const friday: Date = new Date(monday);
-        friday.setDate(monday.getDate() + 4);
+        const sunday: Date = new Date(monday);
+        sunday.setDate(monday.getDate() + 6); // 월요일로부터 6일 뒤는 일요일
 
-        return { start: monday, end: friday };
+        return { start: monday, end: sunday };
     };
+
 
     const getWeekDays = (baseDate: Date) => {
         const date = new Date(baseDate);
         const day = date.getDay();
         const diff = date.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
 
-        return Array.from({ length: 5 }, (_, i) => {
+        return Array.from({ length: 7 }, (_, i) => { // 변경된 부분: length를 7로 설정
             const newDate: Date = new Date(date.getFullYear(), date.getMonth(), diff + i);
             return formatDateToYYYYMMDD(newDate);
         });
     };
 
     const formatDateToYYYYMMDD = (date: Date) => {
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, "0");
+        const year: number = date.getFullYear();
+        const month: string = (date.getMonth() + 1).toString().padStart(2, "0");
         const day = date.getDate().toString().padStart(2, "0");
         return `${year}${month}${day}`;
     };
@@ -320,12 +321,19 @@ export const DetailedTimetablePage = () => {
                 }
 
                 const classInfoData = await responseClassInfo.json();
-                const validClasses = classInfoData.classInfo[1].row.filter(
-                    (item: { AY: string }) => item.AY === currentYear
-                );
-
+                const validClasses: [] = classInfoData.classInfo[1].row
+                    .filter((item: { AY: string }) => item.AY === currentYear)
+                    .map(
+                        (item: {
+                            GRADE: { toString: () => any };
+                            CLASS_NM: { toString: () => any };
+                        }) => ({
+                            GRADE: item.GRADE.toString(),
+                            CLASS_NM: item.CLASS_NM.toString(),
+                        })
+                    );
                 setAvailableClasses(validClasses);
-                // 요청 범위를 현재 주의 월요일부터 금요일까지로 설정합니다.
+
                 const responseDetailedTimetable: Response = await fetch(
                     `/api/education?endpoint=misTimetable&KEY=${API_KEY}&ATPT_OFCDC_SC_CODE=${OFFICE_CODE}&SD_SCHUL_CODE=${SCHOOL_CODE}&GRADE=${selection.GRADE}&CLASS_NM=${selection.CLASS_NM}&TI_FROM_YMD=${startStr}&TI_TO_YMD=${endStr}`
                 );
@@ -397,7 +405,7 @@ export const DetailedTimetablePage = () => {
         setSelection({ ...selection, CLASS_NM: e.target.value });
     };
 
-    const filteredTimetable = selectedDate ? timetableByDate[selectedDate] : [];
+    const filteredTimetable = selectedDate ? timetableByDate[selectedDate] || [] : [];
 
     return (
         <WrapDetailedContainer>
@@ -409,63 +417,62 @@ export const DetailedTimetablePage = () => {
                 월요일부터 금요일까지의 일주일간의 시간표에요. <br /> 세부 시간표는
                 학급의 사정에 따라 변경될 수 있어요.
             </InfoSentence>
-            {isLoading ? (
-                <p>시간표를 불러오고 있어요...</p>
-            ) : (
-                <WrapTimeTableMainContainer>
-                    <SelectGradeClassNMContainer>
-                        <SelectGradeTitle>
-                            <Image src="/cog.svg" width={24} height={24} alt="시간표" />
-                            <h2>학년/반 설정</h2>
-                        </SelectGradeTitle>
-                        <div className="select-grade">
-                            <SelectOption
-                                value={selection.GRADE}
-                                onChange={handleGradeChange}
+
+            <WrapTimeTableMainContainer>
+                <SelectGradeClassNMContainer>
+                    <SelectGradeTitle>
+                        <Image src="/cog.svg" width={24} height={24} alt="시간표" />
+                        <h2>학년/반 설정</h2>
+                    </SelectGradeTitle>
+                    <div className="select-grade">
+                        <SelectOption
+                            value={selection.GRADE}
+                            onChange={handleGradeChange}
+                        >
+                            {availableClasses
+                                .map((cls) => cls.GRADE)
+                                .filter((value, index, self) => self.indexOf(value) === index)
+                                .map((grade) => (
+                                    <option key={grade} value={grade}>
+                                        {grade}
+                                    </option>
+                                ))}
+                        </SelectOption>
+                        <label htmlFor="grade-select">학년</label>
+                        <SelectOption
+                            value={selection.CLASS_NM}
+                            onChange={handleClassChange}
+                        >
+                            {availableClasses
+                                .filter((cls) => cls.GRADE === selection.GRADE)
+                                .map((cls, index) => (
+                                    <option key={index} value={cls.CLASS_NM}>
+                                        {cls.CLASS_NM}
+                                    </option>
+                                ))}
+                        </SelectOption>
+                        <label htmlFor="class-select">반</label>
+                    </div>
+                    <hr />
+                    <SelectGradeTitle>
+                        <Image src="/select-date.svg" width={24} height={24} alt="시간표" />
+                        <h2>요일 선택</h2>
+                    </SelectGradeTitle>
+                    <DateButtonContainer>
+                        {weekDays.map((day, index) => (
+                            <DateButton
+                                key={index}
+                                onClick={() => handleDateSelect(day)}
+                                isActive={day === selectedDate}
                             >
-                                {availableClasses
-                                    .map((cls) => cls.GRADE)
-                                    .filter((value, index, self) => self.indexOf(value) === index)
-                                    .map((grade) => (
-                                        <option key={grade} value={grade}>
-                                            {grade}
-                                        </option>
-                                    ))}
-                            </SelectOption>
-                            <label htmlFor="grade-select">학년</label>
-                            <SelectOption
-                                value={selection.CLASS_NM}
-                                onChange={handleClassChange}
-                            >
-                                {availableClasses
-                                    .filter((cls) => cls.GRADE === selection.GRADE)
-                                    .map((cls, index) => (
-                                        <option key={index} value={cls.CLASS_NM}>
-                                            {cls.CLASS_NM}
-                                        </option>
-                                    ))}
-                            </SelectOption>
-                            <label htmlFor="class-select">반</label>
-                        </div>
-                        <hr />
-                        <SelectGradeTitle>
-                            <Image src="/select-date.svg" width={24} height={24} alt="시간표" />
-                            <h2>요일 선택</h2>
-                        </SelectGradeTitle>
-                        <DateButtonContainer>
-                            {weekDays.map((day, index) => (
-                                <DateButton
-                                    key={index}
-                                    onClick={() => handleDateSelect(day)}
-                                    isActive={day === selectedDate}
-                                >
-                                    {formatToDay(day)}
-                                </DateButton>
-                            ))}
-                        </DateButtonContainer>
-                    </SelectGradeClassNMContainer>
-                    <WeekGrid>
-                        {selectedDate && (
+                                {formatToDay(day)}
+                            </DateButton>
+                        ))}
+                    </DateButtonContainer>
+                </SelectGradeClassNMContainer>
+                <WeekGrid>
+                    {selectedDate && (
+                        filteredTimetable.length > 0 ? (
                             <DayContainer>
                                 <DayHeader>{formatDate(selectedDate)} ({formatToDay(selectedDate)})</DayHeader>
                                 <table>
@@ -479,10 +486,15 @@ export const DetailedTimetablePage = () => {
                                     </tbody>
                                 </table>
                             </DayContainer>
-                        )}
-                    </WeekGrid>
-                </WrapTimeTableMainContainer>
-            )}
+                        ) : (
+                            <DayContainer>
+                                <DayHeader>{formatDate(selectedDate)} ({formatToDay(selectedDate)})</DayHeader>
+                                <p>오늘은 시간표가 없어요.</p>
+                            </DayContainer>
+                        )
+                    )}
+                </WeekGrid>
+            </WrapTimeTableMainContainer>
             <WrapMoreInfoContainer>
                 <Link href="/schoolschedules" style={{ display: "block", width: "100%" }}>
                     <GotoContainer>
