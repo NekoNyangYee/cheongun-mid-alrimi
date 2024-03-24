@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "@emotion/styled";
 import { useMealInfoStore } from "@/app/Store/mealInfoStore";
 import { API_KEY, OFFICE_CODE, SCHOOL_CODE } from "@/app/utils/constants";
+import Image from "next/image";
 
 const WrapMealUnfoTitle = styled.div(() => `
     display: flex;
@@ -49,13 +50,6 @@ const MenuContainer = styled.div(() => `
     flex: 1 0 auto; 
     min-height: 100px;
     gap: 16px;
-
-    & .menu-loading-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
     
     & p {
         margin: 0;
@@ -68,6 +62,25 @@ const MenuContainer = styled.div(() => `
     & h2 {
         margin: 0;
         font-size: 1rem;
+    }
+`);
+
+const LoadingContainer = styled.div(() => `
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 300px;
+    font-size: 1rem;
+    color: #71717A;
+    border: 1px solid #E4E4E7;
+    border-radius: 12px;
+
+    & img {
+        width: 50px;
+        height: auto;
     }
 `);
 
@@ -175,17 +188,17 @@ const EducationMealServiceDietInfo = () => {
     };
 
     useEffect(() => {
-        // 스크롤 이벤트 리스너 설정
+        // 스크롤 이벤트 리스너 설정 및 초기 상태 확인
         const container = wrapMealInfoContainerRef.current;
         if (container) {
             container.addEventListener('scroll', checkScrollButtons);
 
-            // 초기 상태 확인
+            // 데이터 로딩 완료 후 스크롤 가능 여부에 따라 버튼 활성화 상태 업데이트
             checkScrollButtons();
+
             return () => container.removeEventListener('scroll', checkScrollButtons);
         }
-    }, []);
-
+    }, [mealInfos]); // mealInfos 상태에 의존성 추가
     const scrollContainer = (offset: number) => {
         if (wrapMealInfoContainerRef.current) {
             const { scrollLeft, clientWidth, scrollWidth } = wrapMealInfoContainerRef.current;
@@ -210,34 +223,31 @@ const EducationMealServiceDietInfo = () => {
                 </svg>
                 <MealTitle>급식 정보</MealTitle>
             </WrapMealUnfoTitle>
-            <WrapMealInfoContainer ref={wrapMealInfoContainerRef}>
-                {Array.from({ length: 7 }).map((_, index) => (
-                    <MenuContainer key={index}>
-                        {isLoading ? (
-                            <h2>날짜 불러오는 중..</h2>
-                        ) : mealInfos[index] ? (
-                            <h2>
-                                {new Date(Number(mealInfos[index].MLSV_YMD.slice(0, 4)), parseInt(mealInfos[index].MLSV_YMD.slice(4, 6)) - 1, Number(mealInfos[index].MLSV_YMD.slice(6, 8)))
-                                    .toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' }) + " 점심"}
-                            </h2>
-                        ) : (
-                            <h2>날짜 정보 없음</h2>
-                        )}
-                        {isLoading ? (
-                            <div className="menu-loading-container">
-                                <p>급식 정보 불러오는 중...</p>
-                            </div>
-                        ) : mealInfos[index] ? (
-                            <>
-                                <p>{mealInfos[index].DDISH_NM.replace(/<br\/>/g, '\n')}</p>
-                                <p>{mealInfos[index].CAL_INFO}</p>
-                            </>
-                        ) : (
-                            <p>급식 정보 없음</p>
-                        )}
-                    </MenuContainer>
-                ))}
-            </WrapMealInfoContainer>
+            {isLoading ? (
+                <LoadingContainer>
+                    <Image src="/loading-bar.gif" alt="로딩 중" width={24} height={24} />
+                    급식표를 불러오고 있어요...
+                </LoadingContainer> // 로딩 상태일 때 표시할 내용
+            ) : (
+                <WrapMealInfoContainer ref={wrapMealInfoContainerRef}>
+                    {Array.from({ length: 7 }).map((_, index) => (
+                        <MenuContainer key={index}>
+                            {mealInfos[index] ? (
+                                <>
+                                    <h2>
+                                        {new Date(Number(mealInfos[index].MLSV_YMD.slice(0, 4)), parseInt(mealInfos[index].MLSV_YMD.slice(4, 6)) - 1, Number(mealInfos[index].MLSV_YMD.slice(6, 8)))
+                                            .toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' }) + " 점심"}
+                                    </h2>
+                                    <p>{mealInfos[index].DDISH_NM.replace(/<br\/>/g, '\n')}</p>
+                                    <p>{mealInfos[index].CAL_INFO}</p>
+                                </>
+                            ) : (
+                                <p>급식 정보 없음</p>
+                            )}
+                        </MenuContainer>
+                    ))}
+                </WrapMealInfoContainer>
+            )}
             <ScrollBtnContainer>
                 <ScrollButton onClick={() => scrollContainer(-200)} disabled={isLeftDisabled}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
