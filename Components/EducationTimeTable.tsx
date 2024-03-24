@@ -91,7 +91,33 @@ const SelectOption = styled.select`
   background-size: 1.5em auto, 100%;
 `;
 
+const NoDataContainer = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  height: 260px;
+  font-size: 0.9rem;
+  color: #71717A;
+`;
+const LoadingContainer = styled.div(() => `
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 260px;
+    font-size: 1rem;
+    color: #71717A;
 
+    & img {
+        width: 50px;
+        height: auto;
+    }
+`);
 
 const EducationTimeTable = () => {
   const {
@@ -239,7 +265,10 @@ const EducationTimeTable = () => {
         반
       </SelectGradeClassNMContainer>
       {isLoading ? (
-        <p>Loading...</p>
+        <LoadingContainer>
+          <Image src="/loading-bar.gif" alt="로딩 중" width={24} height={24} />
+          오늘 시간표를 불러오고 있어요...
+        </LoadingContainer>
       ) : timeTable.length > 0 ? (
         <table>
           <tbody>
@@ -252,7 +281,10 @@ const EducationTimeTable = () => {
           </tbody>
         </table>
       ) : (
-        <p>오늘은 시간표가 없습니다.</p>
+        <NoDataContainer>
+          <Image src="/magnifier.svg" alt="nodata" width={48} height={48} />
+          시간표가 존재하지 않아요.
+        </NoDataContainer>
       )}
     </WrapTimeTableContainer>
   );

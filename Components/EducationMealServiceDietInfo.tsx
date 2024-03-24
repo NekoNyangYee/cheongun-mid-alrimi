@@ -227,7 +227,7 @@ const EducationMealServiceDietInfo = () => {
                 <LoadingContainer>
                     <Image src="/loading-bar.gif" alt="로딩 중" width={24} height={24} />
                     급식표를 불러오고 있어요...
-                </LoadingContainer> // 로딩 상태일 때 표시할 내용
+                </LoadingContainer>
             ) : (
                 <WrapMealInfoContainer ref={wrapMealInfoContainerRef}>
                     {Array.from({ length: 7 }).map((_, index) => (
