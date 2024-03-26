@@ -193,11 +193,13 @@ const DetailedMealPage = () => {
     };
 
     useEffect(() => {
-        // 컴포넌트가 마운트된 후에만 실행되도록 합니다.
-        if (todayRef.current) {
-            todayRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        setTimeout(() => {
+            if (todayRef.current) {
+                todayRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }, 100); // 100ms 후에 실행
     }, []);
+
 
     return (
         <PageContainer>
