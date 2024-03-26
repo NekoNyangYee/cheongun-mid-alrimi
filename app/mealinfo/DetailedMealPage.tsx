@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useMealInfoStore } from '@/app/Store/mealInfoStore';
 import styled from '@emotion/styled';
 import { MealInfo } from '@/Components/EducationMealServiceDietInfo';
@@ -100,8 +100,33 @@ const InfoSentence = styled.p`
   text-align: left;
 `;
 
+const GotoTodayButton = styled.button<{ rotate: boolean, showbacktotodaybutton: boolean }>`
+    position: fixed;
+    right: ${(props) => (props.showbacktotodaybutton ? '2em' : '-4em')};
+    bottom: 4em;
+    line-height: 0;
+    background-image: linear-gradient(90deg, #EA8D8D 0%, #A890FE 112%);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 50%;
+    padding: 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+    & img {
+        transition: all ease-in 0.3s;
+        transform: ${(props) => (props.rotate ? 'rotate(360deg)' : 'rotate(0)')};
+    }
+
+    &:hover {
+        background-color: #004080;
+    }
+`;
+
 const DetailedMealPage = () => {
-    const { allMealInfos, setAllMealInfos, setIsLoading } = useMealInfoStore();
+    const { allMealInfos, setAllMealInfos, setIsLoading, rotate, setRotate, showBackToTodayButton, setShowBackToTodayButton } = useMealInfoStore();
     const todayRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -151,6 +176,23 @@ const DetailedMealPage = () => {
     });
 
     useEffect(() => {
+        const handleScroll = () => {
+            if (todayRef.current) {
+                const { top, bottom } = todayRef.current.getBoundingClientRect();
+                const isOutOfView: boolean = top < -100 || bottom > window.innerHeight + 100;
+                setShowBackToTodayButton(isOutOfView);
+            }
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    const scrollToTodayAndHideButton = () => {
+        todayRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setRotate(!rotate);
+    };
+
+    useEffect(() => {
         // 컴포넌트가 마운트된 후에만 실행되도록 합니다.
         if (todayRef.current) {
             todayRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -179,6 +221,9 @@ const DetailedMealPage = () => {
                     <p>이번 달 급식 정보가 없습니다.</p>
                 )}
             </MealInfoGrid>
+            <GotoTodayButton onClick={scrollToTodayAndHideButton} rotate={rotate} showbacktotodaybutton={showBackToTodayButton}>
+                <Image src="/magic.svg" alt="위로 가기" width={24} height={24} />
+            </GotoTodayButton>
         </PageContainer>
     );
 

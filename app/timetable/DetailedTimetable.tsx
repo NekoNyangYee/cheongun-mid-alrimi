@@ -257,7 +257,7 @@ export const DetailedTimetablePage = () => {
         const day = date.getDay();
         const diff = date.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
 
-        return Array.from({ length: 7 }, (_, i) => { // 변경된 부분: length를 7로 설정
+        return Array.from({ length: 7 }, (_, i) => {
             const newDate: Date = new Date(date.getFullYear(), date.getMonth(), diff + i);
             return formatDateToYYYYMMDD(newDate);
         });
@@ -414,10 +414,9 @@ export const DetailedTimetablePage = () => {
                 <h1>시간표 조회</h1>
             </div>
             <InfoSentence>
-                월요일부터 금요일까지의 일주일간의 시간표에요. <br /> 세부 시간표는
+                월요일부터 일주일간의 시간표에요. <br /> 세부 시간표는
                 학급의 사정에 따라 변경될 수 있어요.
             </InfoSentence>
-
             <WrapTimeTableMainContainer>
                 <SelectGradeClassNMContainer>
                     <SelectGradeTitle>

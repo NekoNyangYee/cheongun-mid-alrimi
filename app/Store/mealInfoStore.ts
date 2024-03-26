@@ -12,11 +12,15 @@ interface MealInfoState {
   isLoading: boolean;
   isLeftDisabled: boolean;
   isRightDisabled: boolean;
+  rotate: boolean;
+  showBackToTodayButton: boolean;
   setMealInfos: (mealInfos: Array<MealInfo>) => void;
   setAllMealInfos: (allMealInfos: Array<MealInfo>) => void;
   setIsLoading: (isLoading: boolean) => void;
   setIsLeftDisabled: (isDisabled: boolean) => void;
   setIsRightDisabled: (isDisabled: boolean) => void;
+  setRotate: (rotate: boolean) => void;
+  setShowBackToTodayButton: (show: boolean) => void;
 }
 
 export const useMealInfoStore = create<MealInfoState>((set) => ({
@@ -25,9 +29,13 @@ export const useMealInfoStore = create<MealInfoState>((set) => ({
   isLoading: true,
   isLeftDisabled: true,
   isRightDisabled: true,
+  rotate: false,
+  showBackToTodayButton: false,
   setMealInfos: (mealInfos) => set({ mealInfos }),
   setAllMealInfos: (allMealInfos: Array<MealInfo>) => set({ allMealInfos }),
   setIsLoading: (isLoading) => set({ isLoading }),
   setIsLeftDisabled: (isLeftDisabled) => set({ isLeftDisabled }),
   setIsRightDisabled: (isRightDisabled) => set({ isRightDisabled }),
+  setRotate: (rotate) => set({ rotate }),
+  setShowBackToTodayButton: (show) => set({ showBackToTodayButton: show }),
 }));
