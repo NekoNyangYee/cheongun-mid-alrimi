@@ -225,6 +225,25 @@ const WrapMoreInfoContainer = styled.div`
     }
 `;
 
+const LoadingContainer = styled.div(() => `
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    border: 1px solid #E4E4E7;
+    border-radius: 12px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 390px;
+    font-size: 1rem;
+    color: #71717A;
+
+    & img {
+        width: 50px;
+        height: auto;
+    }
+`);
+
 export const DetailedTimetablePage = () => {
     const {
         timeTable,
@@ -470,7 +489,12 @@ export const DetailedTimetablePage = () => {
                     </DateButtonContainer>
                 </SelectGradeClassNMContainer>
                 <WeekGrid>
-                    {selectedDate && (
+                    {isLoading ? (
+                        <LoadingContainer>
+                            <Image src="/loading-bar.gif" alt="로딩 중" width={24} height={24} />
+                            오늘 시간표를 불러오고 있어요...
+                        </LoadingContainer>
+                    ) : (
                         filteredTimetable.length > 0 ? (
                             <DayContainer>
                                 <DayHeader>{formatDate(selectedDate)} ({formatToDay(selectedDate)})</DayHeader>

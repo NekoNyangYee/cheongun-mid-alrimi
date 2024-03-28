@@ -117,6 +117,25 @@ const PaginationContainer = styled.div`
   }
 `;
 
+const LoadingContainer = styled.div(() => `
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    border-radius: 12px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 390px;
+    font-size: 1rem;
+    color: #71717A;
+
+    & img {
+        width: 50px;
+        height: auto;
+    }
+`);
+
 interface EventData {
   EVENT_NM: string;
   AA_YMD: string;
@@ -223,7 +242,12 @@ const DetailedEducationSchedules = () => {
         <br />
         해당 일정은 추후 변동되거나 삭제될 수 있어요.
       </InfoSentence>
-      {isLoading ? <p>로딩 중...</p> : (
+      {isLoading ? (
+        <LoadingContainer>
+          <Image src="/loading-bar.gif" alt="로딩 중" width={24} height={24} />
+          학사일정을 불러오고 있어요...
+        </LoadingContainer>
+      ) : (
         <WrapContainer>
           <PaginationContainer>
             {uniqueMonths.map((month) => (
