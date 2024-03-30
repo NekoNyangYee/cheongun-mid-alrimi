@@ -55,9 +55,15 @@ export const Footer = () => {
             <FooterBox>
                 <h2 className="footer-title">청운중학교 통합 알리미</h2>
                 <div className="social-links">
-                    <Image src="/social-img/instagram.svg" width={24} height={24} alt={""} />
-                    <Image src="/social-img/github.svg" width={24} height={24} alt={""} />
-                    <Image src="/social-img/facebook.svg" width={24} height={24} alt={""} />
+                    <a href="https://www.instagram.com/_nekokim_/">
+                        <Image src="/social-img/instagram.svg" width={24} height={24} alt={""} />
+                    </a>
+                    <a href="https://github.com/NekoNyangYee">
+                        <Image src="/social-img/github.svg" width={24} height={24} alt={""} />
+                    </a>
+                    <a href="https://www.facebook.com/profile.php?id=100010060443473&locale=ko_KR">
+                        <Image src="/social-img/facebook.svg" width={24} height={24} alt={""} />
+                    </a>
                 </div>
                 <p>[28527] 충청북도 청주시 상당구 상당로69번길 38</p>
                 <p>© 2024 청운중학교 통합 알리미 All rights reserved.</p>

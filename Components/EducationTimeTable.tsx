@@ -102,6 +102,7 @@ const NoDataContainer = styled.div`
   font-size: 0.9rem;
   color: #71717A;
 `;
+
 const LoadingContainer = styled.div(() => `
     display: flex;
     flex-direction: column;

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "@emotion/styled";
 import Image from "next/image";
 import { useTimeTableStore } from "../Store/timeTableStore";
@@ -244,6 +244,18 @@ const LoadingContainer = styled.div(() => `
     }
 `);
 
+const NoDataContainer = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  height: 260px;
+  font-size: 0.9rem;
+  color: #71717A;
+`;
+
 export const DetailedTimetablePage = () => {
     const {
         timeTable,
@@ -257,6 +269,7 @@ export const DetailedTimetablePage = () => {
         setAvailableClasses,
         setSelectedDate
     } = useTimeTableStore();
+    const todayRef = useRef<HTMLButtonElement>(null);
 
     const getWeekStartAndEnd = (date: Date) => {
         const currentDate: Date = new Date(date);
@@ -269,7 +282,6 @@ export const DetailedTimetablePage = () => {
 
         return { start: monday, end: sunday };
     };
-
 
     const getWeekDays = (baseDate: Date) => {
         const date = new Date(baseDate);
@@ -512,7 +524,10 @@ export const DetailedTimetablePage = () => {
                         ) : (
                             <DayContainer>
                                 <DayHeader>{formatDate(selectedDate)} ({formatToDay(selectedDate)})</DayHeader>
-                                <p>오늘은 시간표가 없어요.</p>
+                                <NoDataContainer>
+                                    <Image src="/magnifier.svg" alt="nodata" width={48} height={48} />
+                                    시간표가 존재하지 않아요.
+                                </NoDataContainer>
                             </DayContainer>
                         )
                     )}
