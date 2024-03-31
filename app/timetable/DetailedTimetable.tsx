@@ -269,7 +269,6 @@ export const DetailedTimetablePage = () => {
         setAvailableClasses,
         setSelectedDate
     } = useTimeTableStore();
-    const todayRef = useRef<HTMLButtonElement>(null);
 
     const getWeekStartAndEnd = (date: Date) => {
         const currentDate: Date = new Date(date);
