@@ -26,7 +26,7 @@ const StyledHeaderContent = styled.div`
   }
 
   @media (max-width: 972px) {
-    flex-direction: column; // 변경: 모바일 뷰에서 컨텐츠를 세로로 정렬
+    flex-direction: column;
     width: auto;
   }
 `;

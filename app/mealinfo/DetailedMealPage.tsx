@@ -9,8 +9,8 @@ import Image from 'next/image';
 
 const PageContainer = styled.div`
   text-align: center;
-  align-items: center; // 중앙 정렬을 위해 추가
-  width: 100%; // 컨테이너가 전체 너비를 차지하도록 설정
+  align-items: center;
+  width: 100%;
 `;
 
 const StyledMealInfo = styled.div`
@@ -197,7 +197,7 @@ const DetailedMealPage = () => {
             if (todayRef.current) {
                 todayRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
-        }, 100); // 100ms 후에 실행
+        }, 100);
     }, []);
 
 

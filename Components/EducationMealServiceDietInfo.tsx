@@ -210,10 +210,7 @@ const EducationMealServiceDietInfo = () => {
         const container = wrapMealInfoContainerRef.current;
         if (container) {
             container.addEventListener('scroll', checkScrollButtons);
-
-            // 데이터 로딩 완료 후 스크롤 가능 여부에 따라 버튼 활성화 상태 업데이트
             checkScrollButtons();
-
             return () => container.removeEventListener('scroll', checkScrollButtons);
         }
     }, [mealInfos]); // mealInfos 상태에 의존성 추가

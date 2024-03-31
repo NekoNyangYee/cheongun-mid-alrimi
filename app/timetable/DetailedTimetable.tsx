@@ -166,7 +166,7 @@ const DateButton = styled.button<{ isActive: boolean }>`
 const SelectGradeTitle = styled.div`
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* 이 줄을 추가하세요 */
+  justify-content: flex-start;
   gap: 8px;
   margin-right: auto;
 

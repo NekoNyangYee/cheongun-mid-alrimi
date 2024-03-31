@@ -49,8 +49,8 @@ const WrapScheduleTitle = styled.div(() => `
   align-items: center;
   gap: 8px;
   justify-content: space-between;
-  white-space: normal; // 자동 줄바꿈을 허용하도록 설정
-  overflow-wrap: break-word; // 단어가 너무 길 경우 자동으로 줄바꿈
+  white-space: normal;
+  overflow-wrap: break-word;
 
   & .schedule-title {
     display: flex;

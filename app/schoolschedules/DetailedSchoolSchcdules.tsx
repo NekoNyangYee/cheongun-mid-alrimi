@@ -26,7 +26,7 @@ const WrapSchoolScheduleContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
-  align-items: start; // 각 월별 컨테이너의 시작점을 상단에 맞춥니다.
+  align-items: start;
   text-align: left;
   width: 100%;
 
@@ -96,7 +96,7 @@ const PaginationButton = styled.button<{ isActive: boolean }>`
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.9rem;
-  white-space: nowrap; /* 텍스트를 한 줄에 표시 */
+  white-space: nowrap;
 
   @media (max-width: 768px) {
     font-size: 1rem;
@@ -169,7 +169,7 @@ const DetailedEducationSchedules = () => {
     const fetchEvents = async (): Promise<void> => {
       let allEvents: Array<EventData> = [];
       let pageIndex: number = 1;
-      const pageSize: number = 1000; // API 문서에 따라 설정
+      const pageSize: number = 1000;
 
       try {
         while (true) {
@@ -191,7 +191,6 @@ const DetailedEducationSchedules = () => {
           pageIndex++;
         }
 
-        // 여기에서 2024년 데이터 필터링 및 상태 업데이트
         const filteredEvents: Array<EventData> = allEvents
           .filter(
             (event) =>
@@ -216,7 +215,7 @@ const DetailedEducationSchedules = () => {
     };
 
     fetchEvents().then(() => {
-      setIsLoading(false); // 데이터 로딩 완료
+      setIsLoading(false);
     });
   }, [setMonthEvents, setIsLoading]);
 
