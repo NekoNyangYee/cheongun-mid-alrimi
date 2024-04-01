@@ -38,7 +38,6 @@ const HeaderBox = styled.div(
   left: 0;
   background-color: #FFFFFF;
   border-bottom: transparent;
-  padding: 1rem;
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;
@@ -49,6 +48,7 @@ const HeaderBox = styled.div(
    & .main-logo {
     width: 36px;
     height: 36px;
+    padding: 1rem;
 
       @media (max-width: 972px) {
         margin: 0 auto;
@@ -66,16 +66,17 @@ const StyledLink = styled.button<{ isActive: boolean }>`
   background-color: transparent;
   border: none;
   color: ${({ isActive }) => (isActive ? "#000000" : "#71717A")};
-  border-bottom: ${({ isActive }) => (isActive ? "2px solid #000000" : "none")};
+  border-bottom: ${({ isActive }) => (isActive ? "4px solid #000000" : "none")};
   font-size: 1rem;
   font-weight: ${({ isActive }) => (isActive ? "bold" : "normal")};
   margin: 0;
   cursor: pointer;
-  padding: 0;
+  padding: 1rem 0;
 
   @media (max-width: 972px) {
     font-size: 1.2rem;
     font-weight: bold;
+    padding: 0;
   }
 `;
 
@@ -150,14 +151,23 @@ export const Header = () => {
       setIsHeaderScrolled(window.scrollY > 0);
     }
 
+    const handleResize = () => {
+      // 브라우저의 너비가 특정 값(예: 768px) 이상이 되면 메뉴를 자동으로 닫는다.
+      if (window.innerWidth >= 972) {
+        setIsOpen(false);
+      }
+    };
+
     window.addEventListener("scroll", handleScroll);
+    window.addEventListener("resize", handleResize);
 
     // 컴포넌트가 언마운트될 때, 스크롤 방지 설정을 초기화하기 위한 cleanup 함수
     return () => {
       document.body.style.overflow = "auto";
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleResize);
     };
-  }, [isOpen]);
+  }, [isOpen, setIsOpen, setIsHeaderScrolled]);
 
   return (
     <HeaderBox isOpen={isOpen} isHeaderScrolled={isHeaderScrolled}>
