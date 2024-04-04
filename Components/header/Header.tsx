@@ -127,13 +127,18 @@ const MobileMenu = styled.div<{ isOpen: boolean }>`
   }
 `;
 
+interface LinkItem {
+  href: string;
+  label: string;
+}
+
 export const Header = () => {
   const { isOpen, setIsOpen, isHeaderScrolled, setIsHeaderScrolled } = useHeaderScrollStore();
 
   const pathname = usePathname();
   const toggleMenu = () => setIsOpen(!isOpen);
 
-  const links = [
+  const links: LinkItem[] = [
     { href: "/", label: "홈" },
     { href: "/schoolschedules", label: "학사일정" },
     { href: "/timetable", label: "시간표" },
@@ -152,7 +157,6 @@ export const Header = () => {
     }
 
     const handleResize = () => {
-      // 브라우저의 너비가 특정 값(예: 768px) 이상이 되면 메뉴를 자동으로 닫는다.
       if (window.innerWidth >= 972) {
         setIsOpen(false);
       }
