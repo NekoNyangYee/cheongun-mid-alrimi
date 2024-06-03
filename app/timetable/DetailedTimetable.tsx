@@ -161,6 +161,7 @@ const DateButton = styled.button<{ isActive: boolean }>`
   color: ${(props) => (props.isActive ? "#FFFFFF" : "#000000")};
   border-radius: 8px;
   cursor: pointer;
+  font-size: 0.8rem;
 `;
 
 const SelectGradeTitle = styled.div`

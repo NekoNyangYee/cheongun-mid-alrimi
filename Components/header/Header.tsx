@@ -101,7 +101,7 @@ const fadeOut = keyframes`
   }
   to {
     opacity: 0;
-    transform: scale(0.9);
+    transform: scale(0.);
   }
 `;
 
@@ -110,13 +110,13 @@ const rotateOpen = keyframes`
     transform: rotate(0deg);
   }
   to {
-    transform: rotate(360deg);
+    transform: rotate(180deg);
   }
 `;
 
 const rotateClose = keyframes`
   from {
-    transform: rotate(360deg);
+    transform: rotate(180deg);
   }
   to {
     transform: rotate(0deg);
