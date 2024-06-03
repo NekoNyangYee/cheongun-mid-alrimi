@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "@emotion/styled";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useHeaderScrollStore } from "@/app/Store/headerStore";
+import { keyframes } from "@emotion/react";
 
 const StyledHeaderContent = styled.div`
   display: flex;
@@ -30,13 +31,14 @@ const StyledHeaderContent = styled.div`
     width: auto;
   }
 `;
+
 const HeaderBox = styled.div(
   ({ isOpen, isHeaderScrolled }: { isOpen: boolean, isHeaderScrolled: boolean }) => `
   position: fixed;
   width: 100%;
   top: 0;
   left: 0;
-  background-color: #FFFFFF;
+  background-color: rgba(255, 255, 255, .7);
   border-bottom: transparent;
   box-sizing: border-box;
   display: flex;
@@ -44,6 +46,7 @@ const HeaderBox = styled.div(
   z-index: 10;
   box-shadow: ${isHeaderScrolled ? "0 2px 2px #E4E4E7" : "none"};
   transition: box-shadow 0.2s ease-in-out;
+  backdrop-filter: blur(10px);
 
    & .main-logo {
     width: 36px;
@@ -80,7 +83,47 @@ const StyledLink = styled.button<{ isActive: boolean }>`
   }
 `;
 
-const MenuIcon = styled.div`
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+`;
+
+const fadeOut = keyframes`
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+`;
+
+const rotateOpen = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+const rotateClose = keyframes`
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+`;
+
+const MenuIcon = styled.div<{ isOpen: boolean }>`
   display: none;
   position: fixed;
   top: 24px;
@@ -93,6 +136,7 @@ const MenuIcon = styled.div`
     width: 24px;
     height: 24px;
     margin: auto 0;
+    animation: ${({ isOpen }) => (isOpen ? rotateOpen : rotateClose)} 0.3s ease-in-out;
   }
 
   @media (max-width: 972px) {
@@ -124,6 +168,7 @@ const MobileMenu = styled.div<{ isOpen: boolean }>`
     left: 0;
     background-color: transparent;
     gap: 20px;
+    animation: ${({ isOpen }) => (isOpen ? fadeIn : fadeOut)} 0.3s ease-in-out;
   }
 `;
 
@@ -177,13 +222,13 @@ export const Header = () => {
     <HeaderBox isOpen={isOpen} isHeaderScrolled={isHeaderScrolled}>
       <StyledHeaderContent>
         <Image
-          src="/logo/logo.webp"
+          src="/logo/logo.png"
           width={150}
           height={150}
           alt={""}
           className="main-logo"
         />
-        <MenuIcon onClick={toggleMenu}>
+        <MenuIcon isOpen={isOpen} onClick={toggleMenu}>
           {isOpen ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
