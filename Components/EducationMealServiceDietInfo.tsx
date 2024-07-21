@@ -62,7 +62,7 @@ const MenuContainer = styled.div(() => `
     border: 1px solid #E4E4E7;
     border-radius: 12px;
     width: 232px; 
-    height: auto;
+    height: 320px;
     box-sizing: border-box; 
     justify-content: space-between;
     flex: 1 0 auto; 
@@ -90,7 +90,7 @@ const LoadingContainer = styled.div(() => `
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 300px;
+    height: 320px;
     font-size: 1rem;
     color: #71717A;
     border: 1px solid #E4E4E7;

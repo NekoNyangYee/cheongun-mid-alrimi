@@ -82,27 +82,39 @@ const EducationSchedules = () => {
   const formattedCurrentDate: string = `${currentYear}${currentMonth.toString().padStart(2, '0')}${currentDay.toString().padStart(2, '0')}`;
 
   useEffect(() => {
-    const fetchData = async (): Promise<void> => {
+    const fetchEvents = async (): Promise<void> => {
+      let allEvents: Array<any> = [];
+      let pageIndex: number = 1;
+      const pageSize: number = 100; // 한 번에 가져올 데이터 개수 설정
+
       try {
-        const startDateOfYear: string = `${currentYear}`;
-        const response: Response = await fetch(`/api/education?endpoint=SchoolSchedule&KEY=${API_KEY}&ATPT_OFCDC_SC_CODE=${OFFICE_CODE}&SD_SCHUL_CODE=${SCHOOL_CODE}&AA_YMD=${startDateOfYear}`);
+        while (true) {
+          const response: Response = await fetch(
+            `/api/education?endpoint=SchoolSchedule&KEY=${API_KEY}&pIndex=${pageIndex}&pSize=${pageSize}&ATPT_OFCDC_SC_CODE=${OFFICE_CODE}&SD_SCHUL_CODE=${SCHOOL_CODE}&AA_YMD=${currentYear}`
+          );
 
-        if (!response.ok) {
-          throw new Error('데이터를 불러오는 중에 오류가 발생했습니다.');
+          if (!response.ok) throw new Error('데이터를 불러오는 중에 오류가 발생했습니다.');
+
+          const data = await response.json();
+          const events = data.SchoolSchedule?.[1]?.row ?? [];
+
+          if (events.length === 0) break; // 더 이상 데이터가 없으면 반복 종료
+
+          allEvents = allEvents.concat(events);
+          pageIndex++;
         }
-        const data = await response.json();
-        const events = data.SchoolSchedule[1].row;
-        setMonthEvents(events);
 
-        const filteredEvents = events
-          .map((event: any) => ({
-            EVENT_NM: event.EVENT_NM,
-            AA_YMD: event.AA_YMD,
-            DISPLAY_DATE: `${parseInt(event.AA_YMD.substring(4, 6), 10)}월 ${parseInt(event.AA_YMD.substring(6), 10)}일`,
-          }));
+        setMonthEvents(allEvents);
 
-        const todayEvents: [] = filteredEvents.filter((event: { AA_YMD: string; }) => event.AA_YMD === formattedCurrentDate);
-        const upcomingEvents: [] = filteredEvents.filter((event: { AA_YMD: number; }) => Number(event.AA_YMD) > Number(formattedCurrentDate)).slice(0, 2);
+        const filteredEvents = allEvents.map((event: any) => ({
+          EVENT_NM: event.EVENT_NM,
+          AA_YMD: event.AA_YMD,
+          DISPLAY_DATE: `${parseInt(event.AA_YMD.substring(4, 6), 10)}월 ${parseInt(event.AA_YMD.substring(6), 10)}일`,
+        }));
+
+        const todayEvents = filteredEvents.filter((event: { AA_YMD: string }) => event.AA_YMD === formattedCurrentDate);
+        const upcomingEvents = filteredEvents.filter((event: { AA_YMD: string }) => Number(event.AA_YMD) > Number(formattedCurrentDate)).slice(0, 2);
+
         setTodayEvents(todayEvents);
         setUpcomingEvents(upcomingEvents);
       } catch (error) {
@@ -110,7 +122,7 @@ const EducationSchedules = () => {
       }
     };
 
-    fetchData();
+    fetchEvents();
   }, []);
 
   return (
